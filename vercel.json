@@ -1,7 +1,191 @@
-{
-  "routes": [
-    { "handle": "filesystem" },
-    { "src": "/login", "dest": "/index.html" },
-    { "src": "/(.*)", "dest": "/index.html" }
-  ]
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DVVIA — Join the Waitlist</title>
+  <meta name="description" content="DVVIA is launching soon. Join the waitlist for early access." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: #ffffff;
+      color: #0f172a;
+      line-height: 1.5;
+    }
+    .wrap { min-height: 100vh; display: flex; flex-direction: column; }
+    .topbar {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .brand {
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: #1e3a8a;
+      text-decoration: none;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 40px;
+      padding: 0 14px;
+      border-radius: 10px;
+      border: 1px solid #93c5fd;
+      color: #1d4ed8;
+      background: #ffffff;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .btn:hover { background: #eff6ff; }
+    .main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 16px;
+    }
+    .card {
+      width: 100%;
+      max-width: 720px;
+      border: 1px solid #e5e7eb;
+      border-radius: 18px;
+      padding: 28px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+    }
+    h1 {
+      font-size: 34px;
+      line-height: 1.1;
+      margin-bottom: 10px;
+      color: #0b1220;
+    }
+    .sub {
+      font-size: 16px;
+      color: #475569;
+      margin-bottom: 18px;
+    }
+    .notice {
+      font-size: 14px;
+      color: #64748b;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      padding: 12px 14px;
+      border-radius: 12px;
+      margin-bottom: 18px;
+    }
+    form { display: grid; grid-template-columns: 1fr; gap: 12px; }
+    label { font-size: 13px; font-weight: 600; color: #334155; }
+    input {
+      width: 100%;
+      height: 44px;
+      border-radius: 12px;
+      border: 1px solid #cbd5e1;
+      padding: 0 12px;
+      font-size: 15px;
+      outline: none;
+    }
+    input:focus { border-color: #93c5fd; box-shadow: 0 0 0 3px rgba(59,130,246,0.15); }
+    .primary {
+      height: 44px;
+      border-radius: 12px;
+      border: 1px solid #1d4ed8;
+      background: #1d4ed8;
+      color: #ffffff;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .primary:hover { filter: brightness(1.05); }
+    .row { display: grid; grid-template-columns: 1fr; gap: 12px; }
+    @media (min-width: 640px) {
+      .row { grid-template-columns: 1fr 1fr; }
+    }
+    .fineprint {
+      margin-top: 12px;
+      font-size: 12px;
+      color: #64748b;
+    }
+    .links { margin-top: 16px; display: flex; gap: 12px; flex-wrap: wrap; }
+    .link { font-size: 14px; color: #1d4ed8; text-decoration: none; }
+    .link:hover { text-decoration: underline; }
+    .success {
+      display: none;
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid #bbf7d0;
+      background: #f0fdf4;
+      color: #166534;
+      font-size: 14px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <a class="brand" href="/">DVVIA</a>
+      <a class="btn" href="/login">Log in</a>
+    </div>
+
+    <div class="main">
+      <div class="card">
+        <h1>Join the Waitlist</h1>
+        <p class="sub">Get early access when DVVIA launches.</p>
+
+        <div class="notice">
+          We’re building a safer car marketplace with verified listings and public-meeting appointments.
+          Join the waitlist and we’ll notify you when the app is ready.
+        </div>
+
+        <!-- MVP: This is a front-end placeholder. Next step later: connect to a real signup endpoint. -->
+        <form id="waitlistForm">
+          <div class="row">
+            <div>
+              <label for="name">Name (optional)</label>
+              <input id="name" name="name" placeholder="Your name" />
+            </div>
+            <div>
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" placeholder="you@email.com" required />
+            </div>
+          </div>
+
+          <button class="primary" type="submit">Join waitlist</button>
+
+          <div id="success" class="success">✅ You’re on the list. We’ll email you when the app is ready.</div>
+
+          <div class="fineprint">
+            No spam. We’ll only email you about DVVIA launch and access.
+          </div>
+        </form>
+
+        <div class="links">
+          <a class="link" href="/">← Back to home</a>
+          <a class="link" href="#"
+             onclick="alert('App download link will go here once the app is published.'); return false;">
+            App download (coming soon)
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // MVP behavior: show a success message without storing anything yet.
+    document.getElementById('waitlistForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      document.getElementById('success').style.display = 'block';
+      this.querySelector('button[type="submit"]').textContent = 'Added ✓';
+      this.querySelector('button[type="submit"]').disabled = true;
+    });
+  </script>
+</body>
+</html>
