@@ -10,19 +10,47 @@
   <p>The app is launching soon. Join the waitlist.</p>
 </body>
 </html>
+<body style="font-family: Inter, system-ui, -apple-system, Segoe UI, Arial, sans-serif; text-align:center; padding-top:120px;">
 
-<body>
-  <h1>Join the Waitlist</h1>
-  <p>The app is launching soon. Join the waitlist.</p>
+  <h1 style="font-size:36px; margin-bottom:12px;">Join the DVVIA Waitlist</h1>
 
-  <form>
+  <p style="font-size:18px; color:#555; margin-bottom:32px;">
+    The app is launching soon. Be first to get access.
+  </p>
+
+  <form
+    action="https://formspree.io/f/xyzzabcd"
+    method="POST"
+    style="display:inline-block;"
+  >
     <input
       type="email"
+      name="email"
       placeholder="Enter your email"
       required
-      style="padding:10px; width:260px;"
+      style="
+        padding:14px;
+        width:280px;
+        font-size:16px;
+        border:1px solid #ccc;
+        border-radius:6px;
+      "
     />
     <br><br>
-    <button type="submit">Join</button>
+    <button
+      type="submit"
+      style="
+        padding:14px 28px;
+        font-size:16px;
+        background:#1e3a8a;
+        color:white;
+        border:none;
+        border-radius:6px;
+        cursor:pointer;
+      "
+    >
+      Join Waitlist
+    </button>
   </form>
+
 </body>
