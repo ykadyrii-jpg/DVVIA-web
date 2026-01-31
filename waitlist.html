@@ -12,51 +12,64 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: system-ui, sans-serif;
       background: #0b0f1a;
-      color: #fff;
+      font-family: system-ui, sans-serif;
+      color: white;
     }
+
     .card {
-      max-width: 420px;
-      width: 100%;
-      padding: 32px;
+      width: 360px;
+      padding: 28px;
       background: #141a2b;
-      border-radius: 16px;
+      border-radius: 14px;
       text-align: center;
     }
-    input, button {
+
+    input {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 14px;
+      font-size: 16px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      background: white;
+      color: black;
+    }
+
+    button {
       width: 100%;
       padding: 14px;
       font-size: 16px;
       border-radius: 10px;
       border: none;
-    }
-    input { margin-bottom: 14px; }
-    button {
       background: #4f7cff;
-      color: #fff;
+      color: white;
       cursor: pointer;
     }
+
     a {
-      display: inline-block;
+      display: block;
       margin-top: 16px;
+      font-size: 14px;
       color: #8fa7ff;
       text-decoration: none;
-      font-size: 14px;
     }
   </style>
 </head>
 
 <body>
   <div class="card">
-    <h1>Join the Waitlist</h1>
+    <h2>Join the Waitlist</h2>
     <p>We’ll notify you when we launch.</p>
 
-    <!-- 🔴 REPLACE YOUR_FORM_ID -->
-   <form
-  action="https://formspree.io/f/mojwnnko"
-  method="POST"
-      <input type="email" name="email" placeholder="Enter your email" required />
+    <form action="https://formspree.io/f/mjownnko" method="POST">
+      <input
+        type="email"
+        name="email"
+        placeholder="Enter your email"
+        required
+      />
       <button type="submit">Notify Me</button>
     </form>
 
