@@ -12,59 +12,34 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: system-ui, sans-serif;
       background: #0b0f1a;
-      color: #ffffff;
+      color: #fff;
     }
-
     .card {
-      width: 100%;
       max-width: 420px;
+      width: 100%;
       padding: 32px;
       background: #141a2b;
       border-radius: 16px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
       text-align: center;
     }
-
-    h1 {
-      margin: 0 0 12px;
-      font-size: 28px;
-    }
-
-    p {
-      margin: 0 0 24px;
-      color: #b8c0ff;
-    }
-
-    input {
+    input, button {
       width: 100%;
       padding: 14px;
       font-size: 16px;
       border-radius: 10px;
       border: none;
-      outline: none;
-      margin-bottom: 16px;
     }
-
+    input { margin-bottom: 14px; }
     button {
-      width: 100%;
-      padding: 14px;
-      font-size: 16px;
-      border-radius: 10px;
-      border: none;
-      cursor: pointer;
       background: #4f7cff;
-      color: white;
+      color: #fff;
+      cursor: pointer;
     }
-
-    button:hover {
-      opacity: 0.9;
-    }
-
     a {
       display: inline-block;
-      margin-top: 20px;
+      margin-top: 16px;
       color: #8fa7ff;
       text-decoration: none;
       font-size: 14px;
@@ -75,18 +50,15 @@
 <body>
   <div class="card">
     <h1>Join the Waitlist</h1>
-    <p>Get early access when we launch.</p>
+    <p>We’ll notify you when we launch.</p>
 
-    <form>
-      <input
-        type="email"
-        placeholder="Enter your email"
-        required
-      />
+    <!-- 🔴 REPLACE YOUR_FORM_ID -->
+    <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+      <input type="email" name="email" placeholder="Enter your email" required />
       <button type="submit">Notify Me</button>
     </form>
 
-    <a href="/">← Back to Home</a>
+    <a href="/">← Back Home</a>
   </div>
 </body>
 </html>
