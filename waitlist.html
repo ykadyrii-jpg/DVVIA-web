@@ -85,7 +85,11 @@
 <p id="success" style="display:none;margin-top:12px;color:#8fa7ff;">
   ✅ Thanks! You’re on the waitlist.
 </p>
-
+<form onsubmit="
+  this.querySelector('input').style.display='none';
+  this.querySelector('button').innerText='Submitted';
+  this.querySelector('button').disabled=true;
+">
     <a href="/">← Back Home</a>
   </div>
 </body>
