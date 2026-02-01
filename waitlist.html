@@ -77,7 +77,9 @@
     placeholder="Enter your email"
     required
   />
-  <button type="submit">Notify Me</button>
+ <button type="submit" onclick="this.disabled=true; this.innerText='Submitted';">
+  Notify Me
+</button>
 </form>
 
 <p id="success" style="display:none;margin-top:12px;color:#8fa7ff;">
