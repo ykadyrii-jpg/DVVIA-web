@@ -65,6 +65,9 @@
 
     <iframe name="hidden_iframe" style="display:none;"></iframe>
 
+<!-- stays hidden; prevents leaving your site -->
+<iframe name="hidden_iframe" style="display:none;"></iframe>
+
 <form
   action="https://docs.google.com/forms/d/e/1FAIpQLSfgMJa8LF3b01QN09nuB8Smn4fPOZ-QoYPt0qk5GSsVp3Ns4w/formResponse"
   method="POST"
@@ -73,8 +76,22 @@
     this.querySelector('input').style.display='none';
     this.querySelector('button').innerText='Submitted';
     this.querySelector('button').disabled=true;
+    document.getElementById('success').style.display='block';
   "
 >
+  <input
+    type="email"
+    name="entry.1165267086"
+    placeholder="Enter your email"
+    required
+  />
+  <button type="submit">Notify Me</button>
+</form>
+
+<p id="success" style="display:none;margin-top:12px;color:#8fa7ff;">
+  ✅ Thanks! You’re on the waitlist.
+</p>
+
     <a href="/">← Back Home</a>
   </div>
 </body>
