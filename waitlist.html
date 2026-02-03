@@ -69,19 +69,12 @@
 <iframe name="hidden_iframe" style="display:none;"></iframe>
 
 <form
-  action="https://docs.google.com/forms/d/e/1FAIpQLSfgMJa8LF3b01QN09nuB8Smn4fPOZ-QoYPt0qk5GSsVp3Ns4w/formResponse"
+  action="https://script.google.com/macros/s/AKfycbzC-W-w_U4i8cXPIVFkNZE6morAhKOzxKTCEg2csnqXUkuG6I6PebZGCkVzD-nTghg/exec"
   method="POST"
-  target="hidden_iframe"
-  onsubmit="
-    this.querySelector('input').style.display='none';
-    this.querySelector('button').innerText='Submitted';
-    this.querySelector('button').disabled=true;
-    document.getElementById('success').style.display='block';
-  "
 >
   <input
     type="email"
-    name="entry.1165267086"
+    name="email"
     placeholder="Enter your email"
     required
   />
