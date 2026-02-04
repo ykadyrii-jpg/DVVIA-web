@@ -192,11 +192,16 @@
     <p>Join the waitlist and be the first to know when DVVIA launches.</p>
     
     <div class="form-box">
-      <form id="waitlist-form" action="https://docs.google.com/forms/d/e/1FAIpQLSeWT-yfcfhif0KSb00AXOwneCo4vVbgSXA9mAS-m73Sg0-69Q/formResponse" method="POST" target="hidden_iframe">
+      <form id="waitlist-form" action="https://api.web3forms.com/submit" method="POST">
+        <!-- Replace with your Web3Forms Access Key -->
+        <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE">
+        <input type="hidden" name="subject" value="New DVVIA Waitlist Signup">
+        <input type="hidden" name="redirect" value="https://dvvia.com/waitlist#success">
+        
         <input 
           type="email" 
+          name="email"
           id="email-input"
-          name="entry.1593784777"
           placeholder="Enter your email address" 
           required
           autocomplete="email"
@@ -214,24 +219,14 @@
     <a href="/" class="back-link">← Back Home</a>
   </div>
 
-  <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
-
   <script>
-    const form = document.getElementById('waitlist-form');
-    const submitBtn = document.getElementById('submit-btn');
-    const successMessage = document.getElementById('success-message');
-
-    form.addEventListener('submit', function(e) {
-      // Don't prevent default - let the form submit to Google
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Joining...';
-      
-      // Show success message after a delay
-      setTimeout(function() {
-        form.classList.add('hidden');
-        successMessage.classList.add('show');
-      }, 1000);
-    });
+    // Check if redirected after successful submission
+    if (window.location.hash === '#success') {
+      document.getElementById('waitlist-form').classList.add('hidden');
+      document.getElementById('success-message').classList.add('show');
+      // Remove hash from URL
+      history.replaceState(null, null, ' ');
+    }
   </script>
 </body>
 </html>
