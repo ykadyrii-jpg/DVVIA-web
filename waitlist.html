@@ -190,32 +190,26 @@
   <div class="container">
     <h1>DVVIA</h1>
     <p>Join the waitlist and be the first to know when DVVIA launches.</p>
-    
-    <div class="form-box">
-      <form id="waitlist-form" action="https://docs.google.com/forms/d/e/1FAIpQLSeWT-yfcfhif0KSb00AXOwneCo4vVbgSXA9mAS-m73Sg0-69Q/formResponse" method="POST" target="hidden_iframe">
-        <input 
-          type="email" 
-          id="email-input"
-          name="entry.1593784777"
-          placeholder="Enter your email address" 
-          required
-          autocomplete="email"
-        />
-        <button type="submit" id="submit-btn">Join Waitlist</button>
-      </form>
+  <form id="waitlist-form" action="https://docs.google.com" method="POST" target="hidden_iframe">
+    <input
+        type="email"
+        name="entry.1593784777"
+        placeholder="Enter your email address"
+        required
+        autocomplete="email"
+    />
+    <button type="submit">Join Waitlist</button>
+</form>
 
-      <div class="success-message" id="success-message">
-        <div class="success-icon">✓</div>
-        <strong>You're on the list!</strong><br>
-        We'll notify you when DVVIA launches.
-      </div>
-    </div>
+<div class="success-message" id="success-message">
+    <div class="success-icon"></div>
+    <strong>You're on the list!</strong><br>
+    We'll notify you when DVVIA launches.
+</div>
 
-    <a href="/" class="back-link">← Back Home</a>
-  </div>
+<a href="/" class="back-link">Back Home</a>
 
-  <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
-
+<iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
   <script>
     const form = document.getElementById('waitlist-form');
     const submitBtn = document.getElementById('submit-btn');
