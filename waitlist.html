@@ -2,115 +2,121 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>DVVIA – Waitlist</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+  <title>DVVIA — Waitlist</title>
   <style>
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: radial-gradient(ellipse at top, #0b1a33 0%, #050b18 100%);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
-        Roboto, Helvetica, Arial, sans-serif;
-      color: white;
+    body{
+      margin:0;
+      height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#070c18;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+      color:#fff;
     }
-
-    .card {
-      background: #0e1f3d;
-      padding: 32px;
-      border-radius: 14px;
-      width: 100%;
-      max-width: 420px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
-      text-align: center;
+    .card{
+      width:520px;
+      max-width:92vw;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:16px;
+      padding:28px;
+      box-shadow:0 20px 60px rgba(0,0,0,.45);
     }
-
-    h2 {
-      margin: 0 0 8px;
-      font-size: 24px;
+    h2{margin:0 0 6px 0;font-size:26px;}
+    p{margin:0 0 18px 0;color:rgba(255,255,255,.7)}
+    input{
+      width:100%;
+      height:44px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,.15);
+      background:rgba(255,255,255,.08);
+      color:#fff;
+      padding:0 14px;
+      font-size:15px;
+      outline:none;
+      box-sizing:border-box;
     }
-
-    p {
-      margin: 0 0 20px;
-      color: #b9c6e3;
-      font-size: 14px;
+    button{
+      width:100%;
+      margin-top:12px;
+      height:46px;
+      border-radius:10px;
+      border:none;
+      background:#4f7cff;
+      color:#fff;
+      font-size:15px;
+      cursor:pointer;
+      font-weight:600;
     }
-
-    input[type="email"] {
-      width: 100%;
-      padding: 14px;
-      border-radius: 10px;
-      border: none;
-      font-size: 16px;
-      margin-bottom: 14px;
-      outline: none;
+    button:disabled{opacity:.65;cursor:not-allowed;}
+    .success{
+      display:none;
+      margin-top:12px;
+      color:#8affb2;
+      font-size:14px;
     }
-
-    button {
-      width: 100%;
-      padding: 14px;
-      font-size: 16px;
-      border-radius: 10px;
-      border: none;
-      background: #4f7cff;
-      color: white;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #3f6cf0;
-    }
-
-    .success {
-      display: none;
-      margin-top: 16px;
-      color: #8affc1;
-      font-size: 14px;
-    }
-
-    a {
-      display: inline-block;
-      margin-top: 18px;
-      color: #8fb2ff;
-      text-decoration: none;
-      font-size: 14px;
+    a{
+      display:block;
+      text-align:center;
+      margin-top:14px;
+      color:#8fb2ff;
+      text-decoration:none;
+      font-size:14px;
     }
   </style>
 </head>
-<body>
 
+<body>
   <div class="card">
     <h2>Join the Waitlist</h2>
     <p>We’ll notify you when DVVIA launches.</p>
 
-    <!-- IMPORTANT: hidden iframe -->
-    <iframe name="hidden_iframe" style="display:none;"></iframe>
-
-    <!-- FORM -->
-    <form
-      action="https://script.google.com/macros/s/AKfycbyF5elFN_zi0Z8ZQaJPi7CmvA5ZPbZpl2q3NZQjKk2LColyR7kWaehbLnU_Qz3vnCcXaw/exec"
-      method="POST"
-      target="hidden_iframe"
-      onsubmit="document.getElementById('success').style.display='block';"
-    >
-      <input
-        type="email"
-        name="email"
-        placeholder="Enter your email"
-        required
-      />
-      <button type="submit">Notify Me</button>
+    <form id="waitlistForm">
+      <input type="email" name="email" placeholder="Enter your email" required />
+      <button id="submitBtn" type="submit">Notify Me</button>
+      <div id="success" class="success">✅ Thanks! You’re on the waitlist.</div>
     </form>
-
-    <div id="success" class="success">
-      ✅ Thanks! You’re on the waitlist.
-    </div>
 
     <a href="/">← Back Home</a>
   </div>
 
+  <script>
+    // ✅ PASTE YOUR *WEB APP URL* HERE (Deploy → Web app URL)
+    const WEB_APP_URL = "PASTE_YOUR_WEB_APP_URL_HERE";
+
+    const form = document.getElementById("waitlistForm");
+    const btn = document.getElementById("submitBtn");
+    const success = document.getElementById("success");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      success.style.display = "none";
+      btn.disabled = true;
+
+      const formData = new FormData(form);
+
+      try {
+        // Apps Script Web App accepts form POST
+        const res = await fetch(WEB_APP_URL, {
+          method: "POST",
+          body: new URLSearchParams(formData),
+        });
+
+        const text = await res.text(); // should be "ok" or "missing email" or "error: ..."
+        if (text.trim() === "ok") {
+          success.style.display = "block";
+          form.reset();
+        } else {
+          alert("Server response: " + text);
+        }
+      } catch (err) {
+        alert("Error sending. Check WEB_APP_URL and deployment access. " + err.message);
+      } finally {
+        btn.disabled = false;
+      }
+    });
+  </script>
 </body>
 </html>
