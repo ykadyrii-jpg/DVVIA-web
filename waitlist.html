@@ -164,6 +164,14 @@
       transform: translateX(-5px);
     }
 
+    /* Hidden iframe container */
+    #hidden-iframe-container {
+      position: absolute;
+      left: -9999px;
+      width: 600px;
+      height: 800px;
+    }
+
     @media (max-width: 600px) {
       h1 {
         font-size: 2.5rem;
@@ -198,7 +206,7 @@
             required
             autocomplete="email"
           />
-          <button type="button" class="submit-btn" id="submit-btn" onclick="submitEmail()">
+          <button type="button" class="submit-btn" id="submit-btn" onclick="submitToGoogleForm()">
             Join Waitlist
           </button>
         </div>
@@ -214,8 +222,29 @@
     <a href="/" class="back-link">← Back Home</a>
   </div>
 
+  <!-- Hidden iframe that loads the actual Google Form -->
+  <div id="hidden-iframe-container">
+    <iframe 
+      id="google-form-iframe" 
+      src="https://docs.google.com/forms/d/e/1FAIpQLSeWT-yfcfhif0KSb00AXOwneCo4vVbgSXA9mAS-m73Sg0-69Q/viewform?embedded=true"
+      width="600" 
+      height="800"
+      frameborder="0" 
+      marginheight="0" 
+      marginwidth="0">
+      Loading…
+    </iframe>
+  </div>
+
   <script>
-    function submitEmail() {
+    let formLoaded = false;
+    
+    // Wait for iframe to load
+    document.getElementById('google-form-iframe').onload = function() {
+      formLoaded = true;
+    };
+
+    function submitToGoogleForm() {
       const emailInput = document.getElementById('email-input');
       const submitBtn = document.getElementById('submit-btn');
       const formContainer = document.getElementById('form-container');
@@ -232,37 +261,65 @@
       submitBtn.disabled = true;
       submitBtn.textContent = 'Joining...';
 
-      // Open Google Form with pre-filled email in a hidden popup
-      const formUrl = `https://docs.google.com/forms/d/e/1FAIpQLSeWT-yfcfhif0KSb00AXOwneCo4vVbgSXA9mAS-m73Sg0-69Q/viewform?embedded=true&entry.${getEntryId()}=${encodeURIComponent(email)}`;
+      // Access the iframe
+      const iframe = document.getElementById('google-form-iframe');
       
-      // Create hidden iframe to submit form
-      const iframe = document.createElement('iframe');
-      iframe.style.display = 'none';
-      iframe.src = formUrl;
-      document.body.appendChild(iframe);
-
-      // Show success message after brief delay
-      setTimeout(() => {
+      try {
+        // Try to fill the form in the iframe
+        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+        const emailField = iframeDoc.querySelector('input[type="email"]');
+        
+        if (emailField) {
+          // Fill in the email
+          emailField.value = email;
+          
+          // Trigger input event
+          emailField.dispatchEvent(new Event('input', { bubbles: true }));
+          emailField.dispatchEvent(new Event('change', { bubbles: true }));
+          
+          // Find and click submit button
+          setTimeout(() => {
+            const submitButton = iframeDoc.querySelector('div[role="button"]') || 
+                                iframeDoc.querySelector('span:contains("Submit")') ||
+                                iframeDoc.querySelector('[type="submit"]');
+            
+            if (submitButton) {
+              submitButton.click();
+            }
+            
+            // Show success message
+            setTimeout(() => {
+              formContainer.style.display = 'none';
+              successMessage.classList.add('show');
+              submitBtn.disabled = false;
+              submitBtn.textContent = 'Join Waitlist';
+            }, 1000);
+          }, 500);
+        } else {
+          // Fallback: Open form in new tab if can't access iframe
+          window.open(`https://docs.google.com/forms/d/e/1FAIpQLSeWT-yfcfhif0KSb00AXOwneCo4vVbgSXA9mAS-m73Sg0-69Q/viewform?usp=pp_url&entry.0=${encodeURIComponent(email)}`, '_blank');
+          
+          formContainer.style.display = 'none';
+          successMessage.classList.add('show');
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Join Waitlist';
+        }
+      } catch (e) {
+        // CORS prevented access, use fallback
+        console.log('Using fallback method');
+        window.open(`https://docs.google.com/forms/d/e/1FAIpQLSeWT-yfcfhif0KSb00AXOwneCo4vVbgSXA9mAS-m73Sg0-69Q/viewform?usp=pp_url`, '_blank');
+        
         formContainer.style.display = 'none';
         successMessage.classList.add('show');
-        
-        // Remove iframe after submission
-        setTimeout(() => {
-          document.body.removeChild(iframe);
-        }, 2000);
-      }, 1500);
-    }
-
-    function getEntryId() {
-      // This will be auto-detected, but for now we'll use a workaround
-      // The form will still work by opening in the iframe
-      return '1234567890'; // Placeholder
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Join Waitlist';
+      }
     }
 
     // Allow Enter key to submit
     document.getElementById('email-input').addEventListener('keypress', function(e) {
       if (e.key === 'Enter') {
-        submitEmail();
+        submitToGoogleForm();
       }
     });
   </script>
