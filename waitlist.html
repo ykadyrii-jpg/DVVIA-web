@@ -17,14 +17,13 @@
       color: #fff;
       min-height: 100vh;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
       padding: 20px;
     }
 
     .container {
-      max-width: 640px;
+      max-width: 500px;
       width: 100%;
       text-align: center;
       animation: fadeIn 0.8s ease-in;
@@ -36,58 +35,242 @@
     }
 
     h1 {
-      font-size: 3rem;
+      font-size: 3.5rem;
       font-weight: 700;
       margin-bottom: 1rem;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      letter-spacing: -1px;
     }
 
     p {
       font-size: 1.2rem;
-      margin-bottom: 2rem;
+      margin-bottom: 2.5rem;
       color: #c7c7c7;
+      line-height: 1.6;
     }
 
-    .form-container {
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 12px;
-      padding: 2rem;
+    .form-box {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 2.5rem;
       backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     }
 
-    iframe {
-      width: 100%;
-      height: 400px;
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    input[type="email"] {
+      padding: 1.2rem 1.5rem;
+      font-size: 1rem;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+      outline: none;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+
+    input[type="email"]::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    input[type="email"]:focus {
+      border-color: #667eea;
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    }
+
+    .submit-btn {
+      padding: 1.2rem 2rem;
+      font-size: 1.1rem;
+      font-weight: 600;
       border: none;
-      border-radius: 8px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
     }
 
-    a {
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .submit-btn:active {
+      transform: translateY(0);
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .success-message {
+      display: none;
+      padding: 1.2rem;
+      background: rgba(46, 213, 115, 0.15);
+      border: 2px solid #2ed573;
+      border-radius: 12px;
+      margin-top: 1.5rem;
+      animation: slideIn 0.3s ease;
+    }
+
+    .success-message.show {
+      display: block;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .success-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .back-link {
       color: #667eea;
       text-decoration: none;
       margin-top: 2rem;
       display: inline-block;
+      font-size: 1rem;
+      transition: all 0.3s ease;
     }
 
-    a:hover {
-      text-decoration: underline;
+    .back-link:hover {
+      color: #764ba2;
+      transform: translateX(-5px);
+    }
+
+    /* Hide iframe but keep it functional */
+    #google-form-iframe {
+      position: absolute;
+      left: -9999px;
+      width: 1px;
+      height: 1px;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2.5rem;
+      }
+      
+      .form-box {
+        padding: 2rem;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>DVVIA</h1>
-    <p>We'll notify you when DVVIA launches.</p>
+    <p>Join the waitlist and be the first to know when DVVIA launches.</p>
     
-    <div class="form-container">
-      <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeWT-yfcfhif0KSb00AXOwneCo4vVbgSXA9mAS-m73Sg0-69Q/viewform?embedded=true" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+    <div class="form-box">
+      <form id="waitlist-form">
+        <div class="input-group">
+          <input 
+            type="email" 
+            id="email-input" 
+            placeholder="Enter your email address" 
+            required
+            autocomplete="email"
+          />
+          <button type="submit" class="submit-btn" id="submit-btn">
+            Join Waitlist
+          </button>
+        </div>
+      </form>
+
+      <div class="success-message" id="success-message">
+        <div class="success-icon">✓</div>
+        <strong>You're on the list!</strong><br>
+        We'll notify you when DVVIA launches.
+      </div>
     </div>
 
-    <a href="/">← Back Home</a>
+    <a href="/" class="back-link">← Back Home</a>
   </div>
+
+  <!-- Hidden iframe for Google Form submission -->
+  <iframe 
+    name="google-form-iframe" 
+    id="google-form-iframe"
+  ></iframe>
+
+  <script>
+    const form = document.getElementById('waitlist-form');
+    const emailInput = document.getElementById('email-input');
+    const submitBtn = document.getElementById('submit-btn');
+    const successMessage = document.getElementById('success-message');
+    
+    // Your Google Form URL
+    const GOOGLE_FORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSeWT-yfcfhif0KSb00AXOwneCo4vVbgSXA9mAS-m73Sg0-69Q/formResponse';
+    
+    // You need to find the entry ID for your email field
+    // To find it: Right-click on your Google Form's email field → Inspect → Look for name="entry.XXXXXXXX"
+    const EMAIL_ENTRY_ID = 'entry.1976283381'; // Replace this with your actual entry ID
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const email = emailInput.value.trim();
+      
+      if (!email) return;
+
+      // Disable button and show loading state
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Joining...';
+
+      // Create hidden form to submit to Google
+      const googleForm = document.createElement('form');
+      googleForm.action = GOOGLE_FORM_ACTION;
+      googleForm.method = 'POST';
+      googleForm.target = 'google-form-iframe';
+      googleForm.style.display = 'none';
+
+      const emailField = document.createElement('input');
+      emailField.type = 'hidden';
+      emailField.name = EMAIL_ENTRY_ID;
+      emailField.value = email;
+
+      googleForm.appendChild(emailField);
+      document.body.appendChild(googleForm);
+      
+      // Submit form
+      googleForm.submit();
+      
+      // Show success message after a short delay
+      setTimeout(() => {
+        form.style.display = 'none';
+        successMessage.classList.add('show');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Join Waitlist';
+        
+        // Remove the temporary form
+        document.body.removeChild(googleForm);
+      }, 1000);
+    });
+  </script>
 </body>
 </html>
