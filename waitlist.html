@@ -83,39 +83,39 @@
   </div>
 
   <script>
-    https://script.google.com/macros/s/AKfycbx26B5PI_JjnKNDjfjyXhJSBGx1CTUQeVhDV9F31_ModNZMrkaGyhi_G-ksZfoNzbHZ-g/exec;
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx26B5PT_jjnKNDjfjYxhJSBGx1CTUQeVhDV9F31_ModNZMrkaGyhi_G-ksZf0NzbHZ-g/exec";
 
-    const form = document.getElementById("waitlistForm");
-    const btn = document.getElementById("submitBtn");
-    const success = document.getElementById("success")
+  const form = document.getElementById("waitlistForm");
+  const btn = document.getElementById("submitBtn");
+  const success = document.getElementById("success");
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      success.style.display = "none";
-      btn.disabled = true;
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    success.style.display = "none";
+    btn.disabled = true;
 
-      const formData = new FormData(form);
+    const formData = new FormData(form);
 
-      try {
-        // Apps Script Web App accepts form POST
-        const res = await fetch(WEB_APP_URL, {
-          method: "POST",
-          body: new URLSearchParams(formData),
-        });
+    try {
+      const res = await fetch(WEB_APP_URL, {
+        method: "POST",
+        body: new URLSearchParams(formData),
+      });
 
-        const text = await res.text(); // should be "ok" or "missing email" or "error: ..."
-        if (text.trim() === "ok") {
-          success.style.display = "block";
-          form.reset();
-        } else {
-          alert("Server response: " + text);
-        }
-      } catch (err) {
-        alert("Error sending. Check WEB_APP_URL and deployment access. " + err.message);
-      } finally {
-        btn.disabled = false;
+      const text = await res.text();
+
+      if (text.trim() === "ok") {
+        success.style.display = "block";
+        form.reset();
+      } else {
+        alert("Server response: " + text);
       }
-    });
-  </script>
+    } catch (err) {
+      alert("Error sending: " + err.message);
+    } finally {
+      btn.disabled = false;
+    }
+  });
+</script>
 </body>
 </html>
