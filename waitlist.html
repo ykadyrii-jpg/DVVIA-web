@@ -61,9 +61,13 @@
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     }
 
-    form {
+    #waitlist-form {
       display: flex;
       gap: 0.75rem;
+    }
+
+    #waitlist-form.hidden {
+      display: none;
     }
 
     input[type="email"] {
@@ -113,6 +117,42 @@
       transform: translateY(0);
     }
 
+    button[type="submit"]:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .success-message {
+      display: none;
+      padding: 1.5rem;
+      background: rgba(46, 213, 115, 0.15);
+      border: 2px solid #2ed573;
+      border-radius: 12px;
+      animation: slideIn 0.3s ease;
+      text-align: center;
+    }
+
+    .success-message.show {
+      display: block;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .success-icon {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
     .back-link {
       color: #667eea;
       text-decoration: none;
@@ -136,7 +176,7 @@
         padding: 2rem;
       }
 
-      form {
+      #waitlist-form {
         flex-direction: column;
       }
 
@@ -152,25 +192,46 @@
     <p>Join the waitlist and be the first to know when DVVIA launches.</p>
     
     <div class="form-box">
-      <form action="https://docs.google.com/forms/d/e/1FAIpQLSeWT-yfcfhif0KSb00AXOwneCo4vVbgSXA9mAS-m73Sg0-69Q/formResponse" method="POST" target="hidden_iframe" onsubmit="submitted=true;">
+      <form id="waitlist-form" action="https://docs.google.com/forms/d/e/1FAIpQLSeWT-yfcfhif0KSb00AXOwneCo4vVbgSXA9mAS-m73Sg0-69Q/formResponse" method="POST" target="hidden_iframe">
         <input 
           type="email" 
-          name="emailAddress"
+          id="email-input"
+          name="entry.1976283381"
           placeholder="Enter your email address" 
           required
           autocomplete="email"
         />
-        <button type="submit">Join Waitlist</button>
+        <button type="submit" id="submit-btn">Join Waitlist</button>
       </form>
+
+      <div class="success-message" id="success-message">
+        <div class="success-icon">✓</div>
+        <strong>You're on the list!</strong><br>
+        We'll notify you when DVVIA launches.
+      </div>
     </div>
 
     <a href="/" class="back-link">← Back Home</a>
   </div>
 
-  <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="if(submitted) {window.location='https://dvvia.com/thank-you';}"></iframe>
+  <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
 
   <script>
-    var submitted = false;
+    const form = document.getElementById('waitlist-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const successMessage = document.getElementById('success-message');
+
+    form.addEventListener('submit', function(e) {
+      // Don't prevent default - let the form submit to Google
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Joining...';
+      
+      // Show success message after a delay
+      setTimeout(function() {
+        form.classList.add('hidden');
+        successMessage.classList.add('show');
+      }, 1000);
+    });
   </script>
 </body>
 </html>
