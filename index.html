@@ -3,928 +3,775 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DVVIA — Buy & Sell Cars Without the Risk</title>
-  <meta name="description" content="DVVIA is the only car marketplace where every seller is ID-verified, every title is reviewed, and every meeting location is chosen by us — not the seller. No scams. No fake listings. No fear." />
+  <title>DVVIA — Verified Car Marketplace</title>
+  <meta name="description" content="A verified vehicle marketplace for buying, selling, and browsing. Every seller is verified. Every listing is reviewed. No scams, no fear." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --green: #00c896;
-      --green-dim: rgba(0,200,150,0.12);
-      --green-glow: rgba(0,200,150,0.06);
-      --bg: #07090f;
-      --bg2: #0c0f1a;
-      --card: rgba(255,255,255,0.04);
-      --border: rgba(255,255,255,0.07);
-      --text: #c8d6e5;
-      --muted: #5a6a80;
+      --blue: #1a3a5c;
+      --blue-mid: #1e4976;
+      --blue-light: #2563a8;
+      --accent: #00c896;
+      --accent-dim: rgba(0,200,150,0.12);
+      --bg: #f5f6f8;
       --white: #ffffff;
+      --card: #ffffff;
+      --border: #e2e6ed;
+      --text: #1a2535;
+      --muted: #6b7a8d;
+      --light: #f0f2f5;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     html { scroll-behavior: smooth; }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 16px;
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; }
 
     /* ── NAV ── */
     nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 18px 40px;
-      background: rgba(7,9,15,0.85);
-      backdrop-filter: blur(20px);
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0 40px; height: 64px;
+      background: var(--white);
       border-bottom: 1px solid var(--border);
+      box-shadow: 0 1px 8px rgba(0,0,0,0.06);
     }
+    .nav-logo { font-size: 26px; font-weight: 800; color: var(--blue); letter-spacing: -1px; text-decoration: none; }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .nav-notif { position: relative; cursor: pointer; padding: 8px; display: none; }
+    .nav-notif-icon { font-size: 20px; }
+    .nav-notif-badge { position: absolute; top: 4px; right: 4px; width: 8px; height: 8px; border-radius: 50%; background: #e53e3e; display: none; }
+    .nav-notif-badge.show { display: block; }
+    .nav-user { display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border); display: none; }
+    .nav-user-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--blue); display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: 700; }
+    .nav-user-id { font-size: 13px; font-weight: 600; color: var(--text); }
+    .btn { padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: all 0.15s; }
+    .btn-primary { background: var(--blue); color: white; }
+    .btn-primary:hover { background: var(--blue-mid); }
+    .btn-outline { background: transparent; color: var(--blue); border: 1.5px solid var(--blue); }
+    .btn-outline:hover { background: var(--light); }
+    .btn-green { background: var(--accent); color: #07090f; font-weight: 700; }
+    .btn-green:hover { opacity: 0.9; }
 
-    .nav-logo {
-      font-family: 'DM Serif Display', serif;
-      font-size: 24px;
-      color: var(--white);
-      letter-spacing: -0.5px;
-    }
+    /* ── PAGES ── */
+    .page { display: none; min-height: 100vh; }
+    .page.active { display: block; }
 
-    .nav-logo span { color: var(--green); }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 32px;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 500;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover { color: var(--white); }
-
-    .nav-cta {
-      background: var(--green);
-      color: #07090f !important;
-      font-weight: 700 !important;
-      padding: 10px 20px;
-      border-radius: 10px;
-      font-size: 14px !important;
-    }
-
-    /* ── HERO ── */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
+    /* ── LANDING ── */
+    #page-landing { background: white; }
+    .landing-hero {
       text-align: center;
-      padding: 120px 24px 80px;
-      position: relative;
-      overflow: hidden;
+      padding: 140px 24px 80px;
+      max-width: 780px; margin: 0 auto;
     }
+    .landing-hero h1 { font-size: clamp(32px, 5vw, 52px); font-weight: 800; color: var(--blue); line-height: 1.15; letter-spacing: -1px; margin-bottom: 20px; }
+    .landing-hero p { font-size: clamp(15px, 2vw, 18px); color: var(--muted); max-width: 580px; margin: 0 auto 12px; line-height: 1.7; }
+    .landing-hero .sub { font-size: 14px; color: var(--muted); margin-bottom: 36px; }
+    .landing-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 60px; }
+    .how-it-works { background: var(--light); border-radius: 20px; padding: 48px 40px; margin: 0 24px 60px; max-width: 1100px; margin-left: auto; margin-right: auto; }
+    .how-it-works h2 { text-align: center; font-size: 22px; font-weight: 700; color: var(--blue); margin-bottom: 40px; }
+    .how-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 32px; }
+    .how-step { text-align: center; }
+    .how-step-icon { width: 56px; height: 56px; border-radius: 50%; background: white; display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 14px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+    .how-step-icon.green { background: var(--accent); }
+    .how-step h3 { font-size: 15px; font-weight: 700; color: var(--blue); margin-bottom: 6px; }
+    .how-step p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+    .how-step em { font-style: italic; color: var(--muted); font-size: 12px; display: block; margin-top: 4px; }
+    .landing-footer { text-align: center; padding: 32px; border-top: 1px solid var(--border); font-size: 13px; color: var(--muted); }
+    .landing-footer a { color: var(--blue); text-decoration: none; margin: 0 8px; }
 
-    .hero-glow {
-      position: absolute;
-      top: 30%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(0,200,150,0.08) 0%, transparent 70%);
-      pointer-events: none;
+    /* ── LOGIN PAGE ── */
+    #page-login { background: var(--bg); display: flex; align-items: center; justify-content: center; padding: 80px 24px; }
+    .login-box { background: white; border-radius: 20px; padding: 48px 40px; width: 100%; max-width: 440px; border: 1px solid var(--border); box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+    .login-box h2 { font-size: 24px; font-weight: 800; color: var(--blue); margin-bottom: 8px; }
+    .login-box .login-sub { font-size: 14px; color: var(--muted); margin-bottom: 32px; line-height: 1.6; }
+    .login-input-label { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; display: block; }
+    .login-input { width: 100%; padding: 14px 16px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 16px; font-weight: 600; font-family: 'Inter', sans-serif; color: var(--text); outline: none; transition: border-color 0.15s; letter-spacing: 1px; }
+    .login-input:focus { border-color: var(--blue); }
+    .login-input::placeholder { color: #c0c8d4; font-weight: 400; letter-spacing: 0; }
+    .login-btn { width: 100%; margin-top: 16px; padding: 16px; font-size: 15px; border-radius: 10px; }
+    .login-waiting { display: none; text-align: center; padding: 24px 0; }
+    .login-waiting-icon { font-size: 40px; margin-bottom: 12px; animation: pulse 1.5s infinite; }
+    .login-waiting h3 { font-size: 17px; font-weight: 700; color: var(--blue); margin-bottom: 8px; }
+    .login-waiting p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+    .login-steps { margin-top: 24px; }
+    .login-step { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .login-step:last-child { border-bottom: none; }
+    .login-step-num { width: 24px; height: 24px; border-radius: 50%; background: var(--light); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: var(--blue); flex-shrink: 0; }
+    .login-step-num.done { background: var(--accent); color: white; }
+    .login-step-num.active { background: var(--blue); color: white; }
+    .login-step-text { font-size: 13px; color: var(--muted); }
+    .login-step-text.active { color: var(--text); font-weight: 600; }
+    .login-error { background: #fff5f5; border: 1px solid #fed7d7; border-radius: 8px; padding: 12px 16px; font-size: 13px; color: #c53030; margin-top: 12px; display: none; }
+    .login-back { text-align: center; margin-top: 20px; font-size: 13px; color: var(--muted); cursor: pointer; }
+    .login-back a { color: var(--blue); text-decoration: none; font-weight: 600; }
+
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    @keyframes spin { to{transform:rotate(360deg)} }
+
+    /* ── BROWSE PAGE ── */
+    #page-browse { padding-top: 64px; }
+    .browse-filters {
+      background: white; border-bottom: 1px solid var(--border);
+      padding: 14px 32px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+      position: sticky; top: 64px; z-index: 100;
     }
-
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--green-dim);
-      border: 1px solid rgba(0,200,150,0.25);
-      border-radius: 100px;
-      padding: 6px 16px;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--green);
-      margin-bottom: 28px;
-      animation: fadeUp 0.6s ease both;
+    .filter-select {
+      padding: 9px 14px; border: 1.5px solid var(--border); border-radius: 8px;
+      font-size: 14px; font-weight: 500; color: var(--text); background: white;
+      cursor: pointer; outline: none; font-family: 'Inter', sans-serif;
+      appearance: none; padding-right: 28px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7a8d' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 10px center;
+      transition: border-color 0.15s;
     }
-
-    .hero-badge-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--green);
-      animation: pulse 2s infinite;
+    .filter-select:focus { border-color: var(--blue); }
+    .filter-btn {
+      padding: 9px 16px; border: 1.5px solid var(--border); border-radius: 8px;
+      font-size: 14px; font-weight: 500; background: white; cursor: pointer;
+      display: flex; align-items: center; gap: 6px; color: var(--text);
+      font-family: 'Inter', sans-serif; transition: border-color 0.15s;
     }
+    .filter-btn:hover { border-color: var(--blue-light); }
+    .filter-count { font-size: 12px; color: var(--muted); margin-left: auto; font-weight: 500; }
 
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(0.8); }
+    .browse-layout { display: flex; min-height: calc(100vh - 128px); }
+    .browse-sidebar {
+      width: 280px; flex-shrink: 0; background: white; border-right: 1px solid var(--border);
+      padding: 24px; position: sticky; top: 128px; height: calc(100vh - 128px); overflow-y: auto;
     }
+    .sidebar-section { margin-bottom: 28px; }
+    .sidebar-section h3 { font-size: 13px; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+    .sidebar-section h3 span { font-size: 14px; font-weight: 400; color: var(--muted); }
+    .range-track { position: relative; height: 4px; background: var(--border); border-radius: 2px; margin: 12px 0; }
+    .range-fill { position: absolute; height: 100%; background: var(--blue); border-radius: 2px; }
+    .range-input { position: absolute; width: 100%; top: -7px; opacity: 0; cursor: pointer; height: 18px; }
+    .range-labels { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); }
+    .radio-group { display: flex; flex-direction: column; gap: 10px; }
+    .radio-item { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+    .radio-item input { accent-color: var(--blue); width: 16px; height: 16px; cursor: pointer; }
+    .radio-item label { font-size: 14px; color: var(--text); cursor: pointer; }
+    .checkbox-group { display: flex; flex-direction: column; gap: 8px; }
+    .checkbox-item { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+    .checkbox-item input { accent-color: var(--blue); width: 15px; height: 15px; cursor: pointer; }
+    .checkbox-item label { font-size: 14px; color: var(--text); cursor: pointer; }
 
-    .hero h1 {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(42px, 7vw, 80px);
-      font-weight: 400;
-      color: var(--white);
-      line-height: 1.1;
-      letter-spacing: -1px;
-      max-width: 820px;
-      margin-bottom: 24px;
-      animation: fadeUp 0.6s 0.1s ease both;
-    }
+    .browse-main { flex: 1; padding: 24px 28px; }
+    .browse-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .browse-header h2 { font-size: 20px; font-weight: 700; color: var(--blue); }
+    .browse-header-sub { font-size: 14px; color: var(--muted); }
+    .sort-select { padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; color: var(--text); background: white; cursor: pointer; font-family: 'Inter', sans-serif; }
 
-    .hero h1 em {
-      font-style: italic;
-      color: var(--green);
-    }
-
-    .hero p {
-      font-size: clamp(16px, 2.5vw, 20px);
-      color: var(--muted);
-      max-width: 560px;
-      margin-bottom: 44px;
-      font-weight: 400;
-      line-height: 1.7;
-      animation: fadeUp 0.6s 0.2s ease both;
-    }
-
-    .hero-buttons {
-      display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
-      justify-content: center;
-      animation: fadeUp 0.6s 0.3s ease both;
-    }
-
-    .btn-primary {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background: var(--green);
-      color: #07090f;
-      font-weight: 700;
-      font-size: 15px;
-      padding: 16px 28px;
-      border-radius: 12px;
-      text-decoration: none;
-      transition: transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 4px 24px rgba(0,200,150,0.25);
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 32px rgba(0,200,150,0.35);
-    }
-
-    .btn-secondary {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background: transparent;
-      color: var(--text);
-      font-weight: 600;
-      font-size: 15px;
-      padding: 16px 28px;
-      border-radius: 12px;
-      text-decoration: none;
-      border: 1px solid var(--border);
-      transition: border-color 0.2s, color 0.2s;
-    }
-
-    .btn-secondary:hover {
-      border-color: rgba(255,255,255,0.2);
-      color: var(--white);
-    }
-
-    /* ── TRUST BAR ── */
-    .trust-bar {
-      display: flex;
-      justify-content: center;
-      gap: 40px;
-      flex-wrap: wrap;
-      padding: 32px 40px;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      background: var(--bg2);
-    }
-
-    .trust-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--muted);
-    }
-
-    .trust-item-check {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: var(--green);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 11px;
-      color: #07090f;
-      font-weight: 800;
-      flex-shrink: 0;
-    }
-
-    /* ── HOW IT WORKS ── */
-    .section {
-      padding: 100px 40px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .section-label {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--green);
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 16px;
-    }
-
-    .section-title {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(32px, 4vw, 52px);
-      font-weight: 400;
-      color: var(--white);
-      line-height: 1.15;
-      letter-spacing: -0.5px;
-      margin-bottom: 16px;
-    }
-
-    .section-sub {
-      font-size: 18px;
-      color: var(--muted);
-      max-width: 540px;
-      line-height: 1.7;
-    }
-
-    .steps {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-      margin-top: 60px;
-    }
-
-    .step-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 28px;
-      position: relative;
-      transition: border-color 0.2s, transform 0.2s;
-    }
-
-    .step-card:hover {
-      border-color: rgba(0,200,150,0.25);
-      transform: translateY(-3px);
-    }
-
-    .step-num {
-      font-family: 'DM Serif Display', serif;
-      font-size: 48px;
-      color: rgba(0,200,150,0.15);
-      line-height: 1;
-      margin-bottom: 16px;
-    }
-
-    .step-icon {
-      font-size: 28px;
-      margin-bottom: 14px;
-      display: block;
-    }
-
-    .step-title {
-      font-size: 17px;
-      font-weight: 700;
-      color: var(--white);
-      margin-bottom: 8px;
-    }
-
-    .step-text {
-      font-size: 14px;
-      color: var(--muted);
-      line-height: 1.65;
-    }
-
-    /* ── WHY DIFFERENT ── */
-    .why-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2px;
-      margin-top: 60px;
-      border-radius: 20px;
-      overflow: hidden;
-      border: 1px solid var(--border);
-    }
-
-    .why-cell {
-      background: var(--card);
-      padding: 32px;
-      border: 1px solid var(--border);
-    }
-
-    .why-cell-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
-      background: var(--green-dim);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      margin-bottom: 16px;
-    }
-
-    .why-cell-title {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--white);
-      margin-bottom: 8px;
-    }
-
-    .why-cell-text {
-      font-size: 14px;
-      color: var(--muted);
-      line-height: 1.65;
-    }
-
-    .why-cell-note {
-      margin-top: 10px;
-      font-size: 12px;
-      color: var(--green);
-      font-weight: 600;
-    }
-
-    /* ── LISTINGS ── */
-    #listings { padding: 80px 40px; max-width: 1100px; margin: 0 auto; }
-
-    .listings-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      margin-bottom: 32px;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-
-    .listings-count {
-      font-size: 14px;
-      color: var(--muted);
-      font-weight: 500;
-    }
-
-    .listings-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 20px;
-    }
-
+    .listings-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
     .listing-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      overflow: hidden;
-      transition: border-color 0.2s, transform 0.2s;
-      cursor: pointer;
-      text-decoration: none;
-      display: block;
+      background: white; border-radius: 14px; overflow: hidden;
+      border: 1px solid var(--border); cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
     }
+    .listing-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); border-color: var(--blue-light); }
+    .listing-photo { height: 190px; background: #f0f2f5; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    .listing-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .listing-photo-placeholder { font-size: 56px; opacity: 0.25; }
+    .listing-body { padding: 16px; }
+    .listing-price { font-size: 22px; font-weight: 800; color: var(--blue); margin-bottom: 3px; }
+    .listing-name { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+    .listing-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+    .listing-tag { font-size: 12px; color: var(--muted); background: var(--light); border-radius: 5px; padding: 3px 8px; font-weight: 500; }
+    .listing-location { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 4px; margin-bottom: 12px; }
+    .listing-view-btn { display: block; width: 100%; padding: 11px; background: var(--blue); color: white; font-size: 14px; font-weight: 600; border-radius: 8px; text-align: center; border: none; cursor: pointer; font-family: 'Inter', sans-serif; transition: background 0.15s; }
+    .listing-view-btn:hover { background: var(--blue-mid); }
 
-    .listing-card:hover {
-      border-color: rgba(0,200,150,0.3);
-      transform: translateY(-4px);
-    }
+    .browse-loading { text-align: center; padding: 80px; color: var(--muted); font-size: 15px; }
+    .browse-empty { text-align: center; padding: 80px 40px; }
+    .browse-empty-icon { font-size: 48px; opacity: 0.3; margin-bottom: 16px; }
+    .browse-empty h3 { font-size: 20px; font-weight: 700; color: var(--blue); margin-bottom: 8px; }
+    .browse-empty p { font-size: 14px; color: var(--muted); }
 
-    .listing-photo {
-      height: 200px;
-      background: #0f1420;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    .listing-photo img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .listing-photo-placeholder {
-      font-size: 64px;
-      opacity: 0.3;
-    }
-
-    .listing-verified-badge {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(7,9,15,0.8);
-      border: 1px solid rgba(0,200,150,0.4);
-      border-radius: 6px;
-      padding: 5px 10px;
-      backdrop-filter: blur(10px);
-    }
-
-    .listing-verified-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--green);
-    }
-
-    .listing-verified-text {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--green);
-      letter-spacing: 0.3px;
-    }
-
-    .listing-body { padding: 18px; }
-
-    .listing-price {
-      font-size: 24px;
-      font-weight: 800;
-      color: var(--white);
-      margin-bottom: 4px;
-    }
-
-    .listing-name {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 10px;
-    }
-
-    .listing-meta {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 14px;
-    }
-
-    .listing-tag {
-      font-size: 12px;
-      color: var(--muted);
-      background: rgba(255,255,255,0.05);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 3px 10px;
-      font-weight: 500;
-    }
-
-    .listing-location {
-      font-size: 13px;
-      color: var(--muted);
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .listing-cta {
-      display: block;
-      width: 100%;
-      background: var(--green);
-      color: #07090f;
-      font-weight: 700;
-      font-size: 14px;
-      padding: 12px;
-      border-radius: 10px;
-      text-align: center;
-      border: none;
-      cursor: pointer;
-      text-decoration: none;
-      margin-top: 14px;
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 500; padding: 20px; opacity: 0; pointer-events: none;
       transition: opacity 0.2s;
     }
-
-    .listing-cta:hover { opacity: 0.9; }
-
-    .listings-loading {
-      text-align: center;
-      padding: 60px;
-      color: var(--muted);
-      font-size: 15px;
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal {
+      background: white; border-radius: 20px; width: 100%; max-width: 900px;
+      max-height: 90vh; overflow-y: auto;
+      transform: scale(0.95); transition: transform 0.2s;
     }
-
-    .listings-empty {
-      text-align: center;
-      padding: 80px 40px;
-      color: var(--muted);
+    .modal-overlay.open .modal { transform: scale(1); }
+    .modal-close {
+      position: absolute; top: 16px; right: 16px; width: 32px; height: 32px;
+      border-radius: 50%; background: rgba(0,0,0,0.08); border: none; cursor: pointer;
+      font-size: 16px; display: flex; align-items: center; justify-content: center;
     }
+    .modal-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 0; position: relative; }
+    .modal-photos { padding: 24px; border-right: 1px solid var(--border); }
+    .modal-main-photo { height: 300px; border-radius: 12px; background: var(--light); overflow: hidden; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; }
+    .modal-main-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .modal-main-photo-placeholder { font-size: 72px; opacity: 0.2; }
+    .modal-thumbs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
+    .modal-thumb { width: 70px; height: 56px; border-radius: 8px; overflow: hidden; flex-shrink: 0; border: 2px solid transparent; cursor: pointer; background: var(--light); display: flex; align-items: center; justify-content: center; font-size: 20px; opacity: 0.4; transition: border-color 0.15s, opacity 0.15s; }
+    .modal-thumb.active { border-color: var(--blue); opacity: 1; }
+    .modal-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .modal-info { padding: 28px; }
+    .modal-title { font-size: 24px; font-weight: 800; color: var(--blue); margin-bottom: 20px; }
+    .modal-specs { background: var(--light); border-radius: 12px; padding: 16px; margin-bottom: 18px; }
+    .modal-spec-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid rgba(0,0,0,0.06); font-size: 14px; }
+    .modal-spec-row:last-child { border-bottom: none; }
+    .modal-spec-label { color: var(--muted); font-weight: 500; }
+    .modal-spec-value { color: var(--text); font-weight: 600; text-align: right; }
+    .modal-condition { margin-bottom: 18px; }
+    .modal-condition h3 { font-size: 13px; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px; }
+    .modal-condition-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+    .modal-condition-item { background: var(--light); border-radius: 8px; padding: 10px 12px; }
+    .modal-condition-label { font-size: 11px; color: var(--muted); font-weight: 500; margin-bottom: 3px; }
+    .modal-condition-value { font-size: 13px; font-weight: 700; }
+    .modal-condition-value.Excellent { color: #00a371; }
+    .modal-condition-value.Good { color: #2b6cb0; }
+    .modal-condition-value.Fair { color: #c07a00; }
+    .modal-condition-value.Poor { color: #c53030; }
+    .modal-location { background: #f0f7ff; border: 1px solid #bee3f8; border-radius: 10px; padding: 14px; margin-bottom: 18px; }
+    .modal-location-label { font-size: 11px; font-weight: 700; color: var(--blue-light); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
+    .modal-location-name { font-size: 15px; font-weight: 700; color: var(--blue); margin-bottom: 2px; }
+    .modal-location-addr { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+    .modal-location-note { font-size: 12px; color: var(--blue-light); line-height: 1.5; }
+    .modal-cta-row { display: flex; gap: 10px; }
+    .modal-cta { flex: 1; padding: 14px; border-radius: 10px; font-size: 15px; font-weight: 700; text-align: center; cursor: pointer; border: none; font-family: 'Inter', sans-serif; transition: all 0.15s; }
+    .modal-cta-primary { background: var(--blue); color: white; }
+    .modal-cta-primary:hover { background: var(--blue-mid); }
+    .modal-cta-share { width: 48px; flex: none; background: var(--light); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; border: 1px solid var(--border); }
 
-    .listings-empty-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.4; }
-    .listings-empty-title { font-size: 20px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
-    .listings-empty-sub { font-size: 14px; line-height: 1.6; }
-
-    /* ── APP DOWNLOAD ── */
-    .app-section {
-      padding: 100px 40px;
-      text-align: center;
-      background: var(--bg2);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .modal-inner { grid-template-columns: 1fr; }
+      .modal-photos { border-right: none; border-bottom: 1px solid var(--border); }
+      .browse-sidebar { display: none; }
     }
-
-    .app-section-inner { max-width: 600px; margin: 0 auto; }
-
-    .app-tagline {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(28px, 4vw, 48px);
-      color: var(--white);
-      margin-bottom: 16px;
-      line-height: 1.2;
-    }
-
-    .app-tagline em { font-style: italic; color: var(--green); }
-
-    .app-sub {
-      font-size: 17px;
-      color: var(--muted);
-      margin-bottom: 40px;
-      line-height: 1.7;
-    }
-
-    .app-store-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      background: var(--white);
-      color: #07090f;
-      font-weight: 700;
-      font-size: 16px;
-      padding: 16px 32px;
-      border-radius: 14px;
-      text-decoration: none;
-      transition: transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-    }
-
-    .app-store-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-    }
-
-    .app-store-icon { font-size: 24px; }
-
-    .app-note {
-      margin-top: 16px;
-      font-size: 13px;
-      color: var(--muted);
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      padding: 40px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 16px;
-      border-top: 1px solid var(--border);
-    }
-
-    .footer-logo {
-      font-family: 'DM Serif Display', serif;
-      font-size: 20px;
-      color: var(--white);
-    }
-
-    .footer-logo span { color: var(--green); }
-
-    .footer-links {
-      display: flex;
-      gap: 24px;
-      list-style: none;
-    }
-
-    .footer-links a {
-      font-size: 13px;
-      color: var(--muted);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-
-    .footer-links a:hover { color: var(--white); }
-
-    .footer-copy {
-      font-size: 13px;
-      color: var(--muted);
-    }
-
-    /* ── ANIMATIONS ── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .fade-in {
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-    }
-
-    .fade-in.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* ── MOBILE ── */
-    @media (max-width: 768px) {
-      nav { padding: 16px 20px; }
-      .nav-links { display: none; }
-      .section { padding: 70px 20px; }
-      #listings { padding: 60px 20px; }
-      .why-grid { grid-template-columns: 1fr; }
-      footer { padding: 30px 20px; flex-direction: column; text-align: center; }
-      .trust-bar { padding: 24px 20px; gap: 20px; }
-      .app-section { padding: 70px 20px; }
+    @media (max-width: 640px) {
+      nav { padding: 0 16px; }
+      .browse-filters { padding: 10px 16px; }
+      .browse-main { padding: 16px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <div class="nav-logo">DV<span>VIA</span></div>
-    <ul class="nav-links">
-      <li><a href="#how-it-works">How it works</a></li>
-      <li><a href="#listings">Browse cars</a></li>
-      <li><a href="#download" class="nav-cta">Get the App</a></li>
-    </ul>
-  </nav>
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo" onclick="showPage('landing')">DVVIA</a>
+  <div class="nav-right">
+    <div class="nav-notif" id="nav-notif" onclick="checkNotifications()">
+      <span class="nav-notif-icon">🔔</span>
+      <div class="nav-notif-badge" id="nav-notif-badge"></div>
+    </div>
+    <div class="nav-user" id="nav-user">
+      <div class="nav-user-avatar" id="nav-avatar">?</div>
+      <span class="nav-user-id" id="nav-user-id">—</span>
+    </div>
+    <a href="https://apps.apple.com/app/dvvia/id6760520915" target="_blank" class="btn btn-primary" id="nav-download-btn">Download App</a>
+    <button class="btn btn-outline" id="nav-login-btn" onclick="showPage('login')">Log In</button>
+  </div>
+</nav>
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-glow"></div>
-    <div class="hero-badge">
-      <div class="hero-badge-dot"></div>
-      Every seller verified. Every title reviewed.
-    </div>
-    <h1>Buy a car without<br><em>the fear.</em></h1>
-    <p>DVVIA is the only marketplace where scamming is structurally impossible — not just discouraged. Verified sellers, reviewed titles, and meeting locations chosen by us.</p>
-    <div class="hero-buttons">
-      <a href="#listings" class="btn-primary">
-        Browse Cars
-        <span>→</span>
-      </a>
-      <a href="#download" class="btn-secondary">
-        Download the App
-      </a>
-    </div>
-  </section>
-
-  <!-- TRUST BAR -->
-  <div class="trust-bar">
-    <div class="trust-item">
-      <div class="trust-item-check">✓</div>
-      Every seller ID-verified
-    </div>
-    <div class="trust-item">
-      <div class="trust-item-check">✓</div>
-      Every title reviewed before listing
-    </div>
-    <div class="trust-item">
-      <div class="trust-item-check">✓</div>
-      Meeting location set by DVVIA
-    </div>
-    <div class="trust-item">
-      <div class="trust-item-check">✓</div>
-      No fake ads. No anonymous sellers.
+<!-- LANDING PAGE -->
+<div id="page-landing" class="page active">
+  <div class="landing-hero">
+    <h1>A verified vehicle marketplace for buying, selling, and browsing.<br>Transparent and secure.</h1>
+    <p>DVVIA ensures every user — buyer, seller, or viewer — is verified, creating a trusted environment with no logical room for deceit.</p>
+    <p class="sub">No one has to provide personal email, phone, or address to buy or sell cars.</p>
+    <div class="landing-buttons">
+      <a href="https://apps.apple.com/app/dvvia/id6760520915" target="_blank" class="btn btn-primary">Download the App to Create an Account</a>
+      <button class="btn btn-outline" onclick="showPage('login')">Log In</button>
     </div>
   </div>
 
-  <!-- HOW IT WORKS -->
-  <section class="section" id="how-it-works">
-    <div class="section-label">How DVVIA works</div>
-    <h2 class="section-title">Trust is built in,<br>not promised.</h2>
-    <p class="section-sub">Every step of buying or selling on DVVIA is designed so there's no logical way to cheat.</p>
-
-    <div class="steps">
-      <div class="step-card fade-in">
-        <div class="step-num">01</div>
-        <span class="step-icon">🪪</span>
-        <div class="step-title">Sellers verify their identity</div>
-        <div class="step-text">Before posting anything, sellers submit a government ID and USPS mail for review. We confirm their real name and address. Anonymous sellers don't exist on DVVIA.</div>
+  <div class="how-it-works">
+    <h2>How It Works</h2>
+    <div class="how-steps">
+      <div class="how-step">
+        <div class="how-step-icon">📱</div>
+        <h3>Get the App</h3>
+        <p>Download the DVVIA app.</p>
+        <em>Free for individual users.</em>
       </div>
-      <div class="step-card fade-in">
-        <div class="step-num">02</div>
-        <span class="step-icon">📄</span>
-        <div class="step-title">We review the title</div>
-        <div class="step-text">Sellers submit a photo of the vehicle title before listing. Our team checks ownership and lien status before the car appears on DVVIA. No title, no listing.</div>
+      <div class="how-step">
+        <div class="how-step-icon">👤</div>
+        <h3>Create an Account</h3>
+        <p>Submit your government ID and a piece of USPS mail for verification.</p>
       </div>
-      <div class="step-card fade-in">
-        <div class="step-num">03</div>
-        <span class="step-icon">📍</span>
-        <div class="step-title">We choose where you meet</div>
-        <div class="step-text">The seller cannot pick the meeting location — we do, based on their verified address. It's always a public place. The seller cannot ask you to go anywhere else.</div>
+      <div class="how-step">
+        <div class="how-step-icon green">✓</div>
+        <h3>Get Verified</h3>
+        <p>DVVIA reviews your documents within 24 hours and activates your account.</p>
       </div>
-      <div class="step-card fade-in">
-        <div class="step-num">04</div>
-        <span class="step-icon">🤝</span>
-        <div class="step-title">You meet, inspect, and decide</div>
-        <div class="step-text">Both sides check in on arrival through the app. Everything is accountable. No-shows are flagged. The deal happens in person, in public, on your terms.</div>
+      <div class="how-step">
+        <div class="how-step-icon">🚗</div>
+        <h3>Buy or Sell</h3>
+        <p>Browse verified listings, post your car, and schedule appointments — all through the app.</p>
+        <em>Website is for browsing only.</em>
       </div>
     </div>
-  </section>
+  </div>
 
-  <!-- WHY DIFFERENT -->
-  <section class="section">
-    <div class="section-label">Why DVVIA is different</div>
-    <h2 class="section-title">Not just safer.<br><em>Structurally</em> safer.</h2>
+  <div class="landing-footer">
+    <a href="https://ykadyrii-jpg.github.io/dvvia-legal/" target="_blank">Privacy Policy</a>
+    <a href="mailto:support@dvvia.com">Contact</a>
+    <span>© 2026 DVVIA</span>
+  </div>
+</div>
 
-    <div class="why-grid fade-in">
-      <div class="why-cell">
-        <div class="why-cell-icon">🚫</div>
-        <div class="why-cell-title">No fake listings</div>
-        <div class="why-cell-text">Every listing is reviewed by our team before going live. We check the title, VIN, and photos. If something doesn't add up, it never gets published.</div>
-        <div class="why-cell-note">vs. Craigslist: anyone can post anything</div>
+<!-- LOGIN PAGE -->
+<div id="page-login" class="page">
+  <div style="padding-top: 64px; min-height: 100vh; background: var(--bg); display: flex; align-items: center; justify-content: center; padding: 100px 24px 40px;">
+    <div class="login-box">
+      <h2>Log in to DVVIA</h2>
+      <p class="login-sub">Enter your DVVIA ID below. You'll get a notification in the app to approve this login — no password needed on the web.</p>
+
+      <div id="login-form-section">
+        <label class="login-input-label">Your DVVIA ID</label>
+        <input type="text" class="login-input" id="login-dvvia-id" placeholder="DV-0000000" maxlength="12" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')startLogin()" />
+        <div class="login-error" id="login-error"></div>
+        <button class="btn btn-primary login-btn" onclick="startLogin()">Send Login Request</button>
+
+        <div class="login-steps" style="margin-top: 28px;">
+          <div class="login-step">
+            <div class="login-step-num">1</div>
+            <div class="login-step-text">Enter your DVVIA ID</div>
+          </div>
+          <div class="login-step">
+            <div class="login-step-num">2</div>
+            <div class="login-step-text">Open the DVVIA app on your phone</div>
+          </div>
+          <div class="login-step">
+            <div class="login-step-num">3</div>
+            <div class="login-step-text">Tap "Approve" on the login notification</div>
+          </div>
+          <div class="login-step">
+            <div class="login-step-num">4</div>
+            <div class="login-step-text">This page unlocks automatically</div>
+          </div>
+        </div>
       </div>
-      <div class="why-cell">
-        <div class="why-cell-icon">🪪</div>
-        <div class="why-cell-title">No anonymous sellers</div>
-        <div class="why-cell-text">Every seller's real identity is confirmed with government ID and verified mail before they can post. You know exactly who you're dealing with — even if you don't see their name.</div>
-        <div class="why-cell-note">vs. Facebook: a profile photo isn't verification</div>
+
+      <div class="login-waiting" id="login-waiting">
+        <div class="login-waiting-icon">📱</div>
+        <h3>Check your DVVIA app</h3>
+        <p>A notification was sent to your phone. Open the DVVIA app and tap <strong>Approve</strong> to log in here.</p>
+        <div style="margin-top: 20px; padding: 14px; background: var(--light); border-radius: 10px; font-size: 13px; color: var(--muted);">
+          Waiting for approval<span id="login-dots">...</span>
+        </div>
+        <button onclick="cancelLogin()" style="margin-top: 16px; background: none; border: none; color: var(--muted); font-size: 13px; cursor: pointer; text-decoration: underline;">Cancel</button>
       </div>
-      <div class="why-cell">
-        <div class="why-cell-icon">📍</div>
-        <div class="why-cell-title">No dangerous meetups</div>
-        <div class="why-cell-text">The meeting location is set by DVVIA, not the seller. It's always a public place near the seller's verified address. They cannot change it or pressure you to go elsewhere.</div>
-        <div class="why-cell-note">vs. everywhere else: meet at my house at 9pm</div>
-      </div>
-      <div class="why-cell">
-        <div class="why-cell-icon">📝</div>
-        <div class="why-cell-title">No misleading descriptions</div>
-        <div class="why-cell-text">Sellers can't write free-text descriptions. Everything on a listing came from documents, photos, and tap-only condition questions — not seller claims.</div>
-        <div class="why-cell-note">vs. everywhere else: "runs great, no issues"</div>
+
+      <div class="login-back">
+        <a href="#" onclick="showPage('landing'); return false;">← Back to home</a>
       </div>
     </div>
-  </section>
+  </div>
+</div>
 
-  <!-- LIVE LISTINGS -->
-  <section id="listings">
-    <div class="listings-header fade-in">
-      <div>
-        <div class="section-label">Live listings</div>
-        <h2 class="section-title" style="font-size: clamp(28px, 3vw, 40px); margin-bottom: 4px;">Browse verified cars</h2>
-        <div class="listings-count" id="listings-count">Loading...</div>
+<!-- BROWSE PAGE -->
+<div id="page-browse" class="page">
+  <div class="browse-filters">
+    <select class="filter-select" id="filter-make" onchange="applyFilters()">
+      <option value="">Make</option>
+    </select>
+    <select class="filter-select" id="filter-model" onchange="applyFilters()">
+      <option value="">Model</option>
+    </select>
+    <select class="filter-select" id="filter-year" onchange="applyFilters()">
+      <option value="">Year</option>
+    </select>
+    <select class="filter-select" id="filter-title" onchange="applyFilters()">
+      <option value="">Title Status</option>
+      <option value="Clean">Clean</option>
+      <option value="Salvage">Salvage</option>
+      <option value="Rebuilt">Rebuilt</option>
+    </select>
+    <span class="filter-count" id="filter-count"></span>
+  </div>
+
+  <div class="browse-layout">
+    <!-- Sidebar -->
+    <div class="browse-sidebar">
+      <div class="sidebar-section">
+        <h3>Seller Type</h3>
+        <div class="radio-group">
+          <div class="radio-item">
+            <input type="radio" name="seller-type" id="st-all" value="" checked onchange="applyFilters()" />
+            <label for="st-all">All verified sellers</label>
+          </div>
+          <div class="radio-item">
+            <input type="radio" name="seller-type" id="st-private" value="private" onchange="applyFilters()" />
+            <label for="st-private">Verified Private</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <h3>Mileage Range <span id="mileage-label">Any</span></h3>
+        <div class="range-track">
+          <div class="range-fill" id="mileage-fill" style="width:100%"></div>
+          <input type="range" class="range-input" id="mileage-range" min="0" max="200000" step="5000" value="200000" oninput="updateMileage(this.value)" />
+        </div>
+        <div class="range-labels"><span>0</span><span>200k+</span></div>
+      </div>
+
+      <div class="sidebar-section">
+        <h3>Price Range <span id="price-label">Any</span></h3>
+        <div class="range-track">
+          <div class="range-fill" id="price-fill" style="width:100%"></div>
+          <input type="range" class="range-input" id="price-range" min="0" max="100000" step="1000" value="100000" oninput="updatePrice(this.value)" />
+        </div>
+        <div class="range-labels"><span>$0</span><span>$100k+</span></div>
+      </div>
+
+      <div class="sidebar-section">
+        <h3>Transmission</h3>
+        <div class="checkbox-group">
+          <div class="checkbox-item"><input type="checkbox" id="trans-auto" value="Automatic" onchange="applyFilters()" /><label for="trans-auto">Automatic</label></div>
+          <div class="checkbox-item"><input type="checkbox" id="trans-manual" value="Manual" onchange="applyFilters()" /><label for="trans-manual">Manual</label></div>
+          <div class="checkbox-item"><input type="checkbox" id="trans-cvt" value="CVT" onchange="applyFilters()" /><label for="trans-cvt">CVT</label></div>
+        </div>
       </div>
     </div>
 
-    <div id="listings-container">
-      <div class="listings-loading">Loading listings...</div>
+    <!-- Main -->
+    <div class="browse-main">
+      <div class="browse-header">
+        <div>
+          <h2>Browse Verified Cars</h2>
+          <div class="browse-header-sub" id="browse-sub">Loading...</div>
+        </div>
+        <select class="sort-select" id="sort-select" onchange="applyFilters()">
+          <option value="newest">Newest first</option>
+          <option value="price-low">Price: low to high</option>
+          <option value="price-high">Price: high to low</option>
+          <option value="mileage">Lowest mileage</option>
+        </select>
+      </div>
+      <div id="listings-container">
+        <div class="browse-loading">Loading verified listings...</div>
+      </div>
     </div>
-  </section>
+  </div>
+</div>
 
-  <!-- DOWNLOAD -->
-  <section class="app-section" id="download">
-    <div class="app-section-inner fade-in">
-      <div class="app-tagline">Ready to buy or sell<br><em>without the stress?</em></div>
-      <p class="app-sub">Download DVVIA to post your car, request viewings, and manage everything from your phone. The website is for browsing — the app is for doing.</p>
-      <a href="https://apps.apple.com/app/dvvia/id6760520915" class="app-store-btn" target="_blank">
-        <span class="app-store-icon">🍎</span>
-        Download on the App Store
-      </a>
-      <p class="app-note">Free to download · iOS only for now · Android coming soon</p>
+<!-- LISTING MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-inner">
+      <div class="modal-photos">
+        <div class="modal-main-photo" id="modal-main-photo">
+          <div class="modal-main-photo-placeholder">🚗</div>
+        </div>
+        <div class="modal-thumbs" id="modal-thumbs"></div>
+      </div>
+      <div class="modal-info">
+        <button class="modal-close" onclick="closeModalBtn()">✕</button>
+        <div class="modal-title" id="modal-title"></div>
+        <div class="modal-specs" id="modal-specs"></div>
+        <div class="modal-condition" id="modal-condition"></div>
+        <div class="modal-location" id="modal-location"></div>
+        <div class="modal-cta-row">
+          <button class="modal-cta modal-cta-primary" onclick="openAppStore()">Schedule viewing through the DVVIA app</button>
+          <div class="modal-cta-share" onclick="shareVehicle()" title="Share">⎋</div>
+        </div>
+      </div>
     </div>
-  </section>
+  </div>
+</div>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-logo">DV<span>VIA</span></div>
-    <ul class="footer-links">
-      <li><a href="#how-it-works">How it works</a></li>
-      <li><a href="#listings">Browse cars</a></li>
-      <li><a href="https://ykadyrii-jpg.github.io/dvvia-legal/" target="_blank">Privacy Policy</a></li>
-      <li><a href="mailto:support@dvvia.com">Contact</a></li>
-    </ul>
-    <div class="footer-copy">© 2026 DVVIA. All rights reserved.</div>
-  </footer>
+<script>
+  const API = 'https://dvvia-backend-4kdh.onrender.com/api';
+  const APP_STORE = 'https://apps.apple.com/app/dvvia/id6760520915';
 
-  <script>
-    const API = 'https://dvvia-backend-4kdh.onrender.com/api';
-    const APP_STORE = 'https://apps.apple.com/app/dvvia/id6760520915';
+  let currentUser = null;
+  let allVehicles = [];
+  let loginPollInterval = null;
+  let loginToken = null;
+  let currentVehicle = null;
+  let currentPhotos = [];
+  let maxMileage = 200000;
+  let maxPrice = 100000;
 
-    // ── Load listings ──
-    async function loadListings() {
-      const container = document.getElementById('listings-container');
-      const countEl = document.getElementById('listings-count');
+  // ── PAGE ROUTING ──
+  function showPage(name) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    window.scrollTo(0, 0);
 
-      try {
-        const res = await fetch(`${API}/vehicles`);
-        const data = await res.json();
+    if (name === 'browse') loadVehicles();
+  }
 
-        if (!data.success || !data.vehicles || data.vehicles.length === 0) {
-          container.innerHTML = `
-            <div class="listings-empty">
-              <div class="listings-empty-icon">🚗</div>
-              <div class="listings-empty-title">No listings yet</div>
-              <div class="listings-empty-sub">Be the first to list your car on DVVIA.<br>Download the app to get started.</div>
-            </div>`;
-          countEl.textContent = '0 verified cars available';
-          return;
-        }
+  // ── AUTH UI ──
+  function updateNavForUser(user) {
+    currentUser = user;
+    document.getElementById('nav-download-btn').style.display = 'none';
+    document.getElementById('nav-login-btn').style.display = 'none';
+    document.getElementById('nav-notif').style.display = 'block';
+    document.getElementById('nav-user').style.display = 'flex';
+    const initials = user.dvviaId ? user.dvviaId.slice(3, 5) : 'DV';
+    document.getElementById('nav-avatar').textContent = initials;
+    document.getElementById('nav-user-id').textContent = user.dvviaId;
+    showPage('browse');
+  }
 
-        const vehicles = data.vehicles;
-        countEl.textContent = `${vehicles.length} verified car${vehicles.length !== 1 ? 's' : ''} available`;
+  // ── LOGIN FLOW ──
+  async function startLogin() {
+    const dvviaId = document.getElementById('login-dvvia-id').value.trim().toUpperCase();
+    const errorEl = document.getElementById('login-error');
+    errorEl.style.display = 'none';
 
-        const grid = document.createElement('div');
-        grid.className = 'listings-grid';
+    if (!dvviaId.startsWith('DV-') || dvviaId.length < 10) {
+      errorEl.textContent = 'Please enter a valid DVVIA ID (e.g. DV-1234567)';
+      errorEl.style.display = 'block';
+      return;
+    }
 
-        vehicles.forEach(v => {
-          const card = document.createElement('a');
-          card.className = 'listing-card fade-in';
-          card.href = APP_STORE;
-          card.target = '_blank';
-          card.rel = 'noopener';
+    try {
+      const res = await fetch(`${API}/auth/web-login-request`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ dvviaId })
+      });
+      const data = await res.json();
 
-          const mileage = Number(v.mileage).toLocaleString() + ' mi';
-          const price = '$' + Number(v.price).toLocaleString();
-          const name = `${v.year} ${v.make} ${v.model}${v.trim_level ? ' ' + v.trim_level : ''}`;
-          const location = v.meeting_location_name || 'Louisville, KY';
-          const days = Math.floor((Date.now() - new Date(v.created_at).getTime()) / 86400000);
-          const listed = days === 0 ? 'Today' : days === 1 ? 'Yesterday' : `${days}d ago`;
-
-          card.innerHTML = `
-            <div class="listing-photo">
-              <div class="listing-photo-placeholder">🚗</div>
-              <div class="listing-verified-badge">
-                <div class="listing-verified-dot"></div>
-                <span class="listing-verified-text">DVVIA Verified</span>
-              </div>
-            </div>
-            <div class="listing-body">
-              <div class="listing-price">${price}</div>
-              <div class="listing-name">${name}</div>
-              <div class="listing-meta">
-                <span class="listing-tag">${mileage}</span>
-                <span class="listing-tag">${v.transmission || 'Auto'}</span>
-                <span class="listing-tag">${v.title_status || 'Clean title'}</span>
-                <span class="listing-tag">${listed}</span>
-              </div>
-              <div class="listing-location">📍 ${location}</div>
-              <a class="listing-cta" href="${APP_STORE}" target="_blank">Request Viewing in App →</a>
-            </div>`;
-
-          grid.appendChild(card);
-        });
-
-        container.innerHTML = '';
-        container.appendChild(grid);
-        observeFadeIns();
-
-      } catch (err) {
-        container.innerHTML = `
-          <div class="listings-empty">
-            <div class="listings-empty-icon">⚠️</div>
-            <div class="listings-empty-title">Couldn't load listings</div>
-            <div class="listings-empty-sub">Please refresh the page to try again.</div>
-          </div>`;
-        countEl.textContent = '';
+      if (!data.success) {
+        errorEl.textContent = data.error || 'DVVIA ID not found. Check and try again.';
+        errorEl.style.display = 'block';
+        return;
       }
-    }
 
-    // ── Scroll animations ──
-    function observeFadeIns() {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(el => {
-          if (el.isIntersecting) {
-            el.target.classList.add('visible');
-            observer.unobserve(el.target);
+      loginToken = data.token;
+      document.getElementById('login-form-section').style.display = 'none';
+      document.getElementById('login-waiting').style.display = 'block';
+
+      // Animate dots
+      let dots = 0;
+      const dotsEl = document.getElementById('login-dots');
+      setInterval(() => { dots = (dots + 1) % 4; dotsEl.textContent = '.'.repeat(dots + 1); }, 600);
+
+      // Poll for approval
+      loginPollInterval = setInterval(async () => {
+        try {
+          const pollRes = await fetch(`${API}/auth/web-login-poll/${loginToken}`);
+          const pollData = await pollRes.json();
+          if (pollData.approved) {
+            clearInterval(loginPollInterval);
+            updateNavForUser({ dvviaId: pollData.dvviaId, userId: pollData.userId });
+          } else if (pollData.denied) {
+            clearInterval(loginPollInterval);
+            cancelLogin();
+            errorEl.textContent = 'Login was denied from the app.';
+            errorEl.style.display = 'block';
           }
-        });
-      }, { threshold: 0.1 });
+        } catch (e) {}
+      }, 2000);
 
-      document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    } catch (err) {
+      errorEl.textContent = 'Could not connect to server. Please try again.';
+      errorEl.style.display = 'block';
+    }
+  }
+
+  function cancelLogin() {
+    clearInterval(loginPollInterval);
+    loginToken = null;
+    document.getElementById('login-form-section').style.display = 'block';
+    document.getElementById('login-waiting').style.display = 'none';
+  }
+
+  // ── VEHICLES ──
+  async function loadVehicles() {
+    document.getElementById('listings-container').innerHTML = '<div class="browse-loading">Loading verified listings...</div>';
+    try {
+      const res = await fetch(`${API}/vehicles`);
+      const data = await res.json();
+      allVehicles = data.success ? (data.vehicles || []) : [];
+      populateFilters();
+      applyFilters();
+    } catch (err) {
+      document.getElementById('listings-container').innerHTML = '<div class="browse-empty"><div class="browse-empty-icon">⚠️</div><h3>Could not load listings</h3><p>Please refresh to try again.</p></div>';
+    }
+  }
+
+  function populateFilters() {
+    const makes = [...new Set(allVehicles.map(v => v.make).filter(Boolean))].sort();
+    const years = [...new Set(allVehicles.map(v => v.year).filter(Boolean))].sort((a, b) => b - a);
+    const makeEl = document.getElementById('filter-make');
+    const yearEl = document.getElementById('filter-year');
+    makeEl.innerHTML = '<option value="">Make</option>' + makes.map(m => `<option value="${m}">${m}</option>`).join('');
+    yearEl.innerHTML = '<option value="">Year</option>' + years.map(y => `<option value="${y}">${y}</option>`).join('');
+  }
+
+  function applyFilters() {
+    const make = document.getElementById('filter-make').value;
+    const model = document.getElementById('filter-model').value;
+    const year = document.getElementById('filter-year').value;
+    const title = document.getElementById('filter-title').value;
+    const sort = document.getElementById('sort-select').value;
+    const sellerType = document.querySelector('input[name="seller-type"]:checked')?.value || '';
+    const transChecked = [...document.querySelectorAll('.checkbox-item input:checked')].map(el => el.value);
+
+    let filtered = allVehicles.filter(v => {
+      if (make && v.make !== make) return false;
+      if (year && String(v.year) !== year) return false;
+      if (title && v.title_status !== title) return false;
+      if (v.mileage > maxMileage) return false;
+      if (v.price > maxPrice) return false;
+      if (transChecked.length > 0 && !transChecked.includes(v.transmission)) return false;
+      return true;
+    });
+
+    filtered.sort((a, b) => {
+      if (sort === 'price-low') return a.price - b.price;
+      if (sort === 'price-high') return b.price - a.price;
+      if (sort === 'mileage') return a.mileage - b.mileage;
+      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+    });
+
+    document.getElementById('browse-sub').textContent = `${filtered.length} verified car${filtered.length !== 1 ? 's' : ''} available`;
+    document.getElementById('filter-count').textContent = filtered.length + ' results';
+    renderListings(filtered);
+  }
+
+  function updateMileage(val) {
+    maxMileage = Number(val);
+    const pct = (val / 200000) * 100;
+    document.getElementById('mileage-fill').style.width = pct + '%';
+    document.getElementById('mileage-label').textContent = val >= 200000 ? 'Any' : Number(val).toLocaleString() + ' mi';
+    applyFilters();
+  }
+
+  function updatePrice(val) {
+    maxPrice = Number(val);
+    const pct = (val / 100000) * 100;
+    document.getElementById('price-fill').style.width = pct + '%';
+    document.getElementById('price-label').textContent = val >= 100000 ? 'Any' : '$' + Number(val).toLocaleString();
+    applyFilters();
+  }
+
+  function renderListings(vehicles) {
+    const container = document.getElementById('listings-container');
+    if (vehicles.length === 0) {
+      container.innerHTML = '<div class="browse-empty"><div class="browse-empty-icon">🚗</div><h3>No listings match your filters</h3><p>Try adjusting your search.</p></div>';
+      return;
+    }
+    const grid = document.createElement('div');
+    grid.className = 'listings-grid';
+    vehicles.forEach(v => {
+      const card = document.createElement('div');
+      card.className = 'listing-card';
+      card.onclick = () => openModal(v);
+      const price = '$' + Number(v.price).toLocaleString();
+      const name = `${v.year} ${v.make} ${v.model}${v.trim_level ? ' ' + v.trim_level : ''}`;
+      const mileage = Number(v.mileage).toLocaleString() + ' mi';
+      const days = Math.floor((Date.now() - new Date(v.created_at).getTime()) / 86400000);
+      const listed = days === 0 ? 'Today' : days === 1 ? 'Yesterday' : `${days}d ago`;
+      card.innerHTML = `
+        <div class="listing-photo"><div class="listing-photo-placeholder">🚗</div></div>
+        <div class="listing-body">
+          <div class="listing-price">${price}</div>
+          <div class="listing-name">${name}</div>
+          <div class="listing-tags">
+            <span class="listing-tag">${mileage}</span>
+            <span class="listing-tag">${v.transmission || 'Auto'}</span>
+            <span class="listing-tag">${v.title_status || 'Clean title'}</span>
+            <span class="listing-tag">${listed}</span>
+          </div>
+          ${v.meeting_location_name ? `<div class="listing-location">📍 ${v.meeting_location_name}</div>` : ''}
+          <button class="listing-view-btn">View Details</button>
+        </div>`;
+      grid.appendChild(card);
+    });
+    container.innerHTML = '';
+    container.appendChild(grid);
+  }
+
+  // ── MODAL ──
+  function openModal(v) {
+    currentVehicle = v;
+    const name = `${v.year} ${v.make} ${v.model}${v.trim_level ? ' ' + v.trim_level : ''}`;
+    document.getElementById('modal-title').textContent = name;
+
+    // Specs
+    const specs = [
+      ['Price', '$' + Number(v.price).toLocaleString()],
+      ['Mileage', Number(v.mileage).toLocaleString() + ' mi'],
+      ['Transmission', v.transmission || '—'],
+      ['Title', v.title_status || 'Clean'],
+      ['Exterior', v.exterior_color || '—'],
+    ];
+    if (v.vin && v.vin !== 'PENDING') specs.push(['VIN', v.vin]);
+    document.getElementById('modal-specs').innerHTML = specs.map(([l, val]) =>
+      `<div class="modal-spec-row"><span class="modal-spec-label">${l}</span><span class="modal-spec-value">${val}</span></div>`
+    ).join('');
+
+    // Condition
+    const condFields = [
+      ['Exterior', v.condition_exterior],
+      ['Interior', v.condition_interior],
+      ['Tires', v.condition_tires],
+      ['Mechanical', v.condition_mechanical],
+      ['AC System', v.condition_ac],
+      ['Electronics', v.condition_electronics],
+    ].filter(([, val]) => val);
+
+    if (condFields.length > 0) {
+      document.getElementById('modal-condition').innerHTML = `
+        <h3>Condition Report</h3>
+        <div class="modal-condition-grid">
+          ${condFields.map(([label, val]) => `
+            <div class="modal-condition-item">
+              <div class="modal-condition-label">${label}</div>
+              <div class="modal-condition-value ${val}">${val}</div>
+            </div>`).join('')}
+        </div>`;
+      document.getElementById('modal-condition').style.display = 'block';
+    } else {
+      document.getElementById('modal-condition').style.display = 'none';
     }
 
-    loadListings();
-    observeFadeIns();
-  </script>
+    // Location
+    if (v.meeting_location_name) {
+      document.getElementById('modal-location').innerHTML = `
+        <div class="modal-location-label">📍 Where you'll meet</div>
+        <div class="modal-location-name">${v.meeting_location_name}</div>
+        ${v.meeting_location_address ? `<div class="modal-location-addr">${v.meeting_location_address}</div>` : ''}
+        <div class="modal-location-note">Public location chosen by DVVIA — the seller cannot change this.</div>`;
+      document.getElementById('modal-location').style.display = 'block';
+    } else {
+      document.getElementById('modal-location').style.display = 'none';
+    }
 
+    // Photos placeholder for now
+    document.getElementById('modal-main-photo').innerHTML = '<div class="modal-main-photo-placeholder">🚗</div>';
+    document.getElementById('modal-thumbs').innerHTML = '';
+
+    document.getElementById('modal-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal(e) {
+    if (e.target === document.getElementById('modal-overlay')) closeModalBtn();
+  }
+
+  function closeModalBtn() {
+    document.getElementById('modal-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function openAppStore() { window.open(APP_STORE, '_blank'); }
+  function shareVehicle() {
+    if (navigator.share && currentVehicle) {
+      navigator.share({ title: `${currentVehicle.year} ${currentVehicle.make} ${currentVehicle.model}`, url: window.location.href });
+    }
+  }
+
+  function checkNotifications() { /* placeholder */ }
+</script>
 </body>
 </html>
