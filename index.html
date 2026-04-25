@@ -500,10 +500,19 @@
   // ── PAGE ROUTING ──
   function showPage(name) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById('page-' + name).classList.add('active');
-    window.scrollTo(0, 0);
-
+    const page = document.getElementById('page-' + name);
+    if (page) {
+      page.classList.add('active');
+      window.scrollTo(0, 0);
+    }
     if (name === 'browse') loadVehicles();
+    if (name === 'login') {
+      // Reset login form
+      document.getElementById('login-form-section').style.display = 'block';
+      document.getElementById('login-waiting').style.display = 'none';
+      document.getElementById('login-error').style.display = 'none';
+      if (document.getElementById('login-dvvia-id')) document.getElementById('login-dvvia-id').value = '';
+    }
   }
 
   // ── AUTH UI ──
@@ -511,7 +520,7 @@
     currentUser = user;
     document.getElementById('nav-download-btn').style.display = 'none';
     document.getElementById('nav-login-btn').style.display = 'none';
-    document.getElementById('nav-notif').style.display = 'block';
+    document.getElementById('nav-notif').style.display = 'flex';
     document.getElementById('nav-user').style.display = 'flex';
     const initials = user.dvviaId ? user.dvviaId.slice(3, 5) : 'DV';
     document.getElementById('nav-avatar').textContent = initials;
@@ -772,6 +781,10 @@
   }
 
   function checkNotifications() { /* placeholder */ }
+
+  // Run on page load
+  checkSession();
+
 </script>
 </body>
 </html>
