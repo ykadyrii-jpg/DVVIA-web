@@ -81,7 +81,8 @@
     .landing-footer a { color: var(--blue); text-decoration: none; margin: 0 8px; }
 
     /* ── LOGIN PAGE ── */
-    #page-login { background: var(--bg); display: flex; align-items: center; justify-content: center; padding: 80px 24px; }
+    #page-login { background: var(--bg); }
+    .login-page-inner { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 80px 24px; }
     .login-box { background: white; border-radius: 20px; padding: 48px 40px; width: 100%; max-width: 440px; border: 1px solid var(--border); box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
     .login-box h2 { font-size: 24px; font-weight: 800; color: var(--blue); margin-bottom: 8px; }
     .login-box .login-sub { font-size: 14px; color: var(--muted); margin-bottom: 32px; line-height: 1.6; }
@@ -324,7 +325,7 @@
 
 <!-- LOGIN PAGE -->
 <div id="page-login" class="page">
-  <div style="padding-top: 64px; min-height: 100vh; background: var(--bg); display: flex; align-items: center; justify-content: center; padding: 100px 24px 40px;">
+  <div class="login-page-inner">
     <div class="login-box">
       <h2>Log in to DVVIA</h2>
       <p class="login-sub">Enter your DVVIA ID below. You'll get a notification in the app to approve this login — no password needed on the web.</p>
@@ -499,19 +500,24 @@
 
   // ── PAGE ROUTING ──
   function showPage(name) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    // Force hide all pages using inline style to beat CSS specificity
+    ['landing', 'login', 'browse'].forEach(p => {
+      const el = document.getElementById('page-' + p);
+      if (el) el.style.display = 'none';
+    });
+    // Show the requested page
     const page = document.getElementById('page-' + name);
     if (page) {
-      page.classList.add('active');
+      page.style.display = 'block';
       window.scrollTo(0, 0);
     }
     if (name === 'browse') loadVehicles();
     if (name === 'login') {
-      // Reset login form
       document.getElementById('login-form-section').style.display = 'block';
       document.getElementById('login-waiting').style.display = 'none';
       document.getElementById('login-error').style.display = 'none';
-      if (document.getElementById('login-dvvia-id')) document.getElementById('login-dvvia-id').value = '';
+      const idInput = document.getElementById('login-dvvia-id');
+      if (idInput) idInput.value = '';
     }
   }
 
