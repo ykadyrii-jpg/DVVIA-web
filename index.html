@@ -27,7 +27,6 @@
     html { scroll-behavior: smooth; }
     body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; }
 
-    /* ── NAV ── */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 200;
       display: flex; justify-content: space-between; align-items: center;
@@ -36,13 +35,14 @@
       border-bottom: 1px solid var(--border);
       box-shadow: 0 1px 8px rgba(0,0,0,0.06);
     }
-    .nav-logo { font-size: 26px; font-weight: 800; color: var(--blue); letter-spacing: -1px; text-decoration: none; }
+    .nav-logo { font-size: 26px; font-weight: 800; color: var(--blue); letter-spacing: -1px; text-decoration: none; cursor: pointer; }
     .nav-right { display: flex; align-items: center; gap: 12px; }
     .nav-notif { position: relative; cursor: pointer; padding: 8px; display: none; }
     .nav-notif-icon { font-size: 20px; }
     .nav-notif-badge { position: absolute; top: 4px; right: 4px; width: 8px; height: 8px; border-radius: 50%; background: #e53e3e; display: none; }
     .nav-notif-badge.show { display: block; }
-    .nav-user { display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border); display: none; }
+    .nav-user { display: none; align-items: center; gap: 8px; cursor: pointer; padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border); transition: background 0.15s; }
+    .nav-user:hover { background: var(--light); }
     .nav-user-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--blue); display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: 700; }
     .nav-user-id { font-size: 13px; font-weight: 600; color: var(--text); }
     .btn { padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: all 0.15s; }
@@ -53,17 +53,11 @@
     .btn-green { background: var(--accent); color: #07090f; font-weight: 700; }
     .btn-green:hover { opacity: 0.9; }
 
-    /* ── PAGES ── */
     .page { display: none; min-height: 100vh; }
     .page.active { display: block; }
 
-    /* ── LANDING ── */
     #page-landing { background: white; }
-    .landing-hero {
-      text-align: center;
-      padding: 140px 24px 80px;
-      max-width: 780px; margin: 0 auto;
-    }
+    .landing-hero { text-align: center; padding: 140px 24px 80px; max-width: 780px; margin: 0 auto; }
     .landing-hero h1 { font-size: clamp(32px, 5vw, 52px); font-weight: 800; color: var(--blue); line-height: 1.15; letter-spacing: -1px; margin-bottom: 20px; }
     .landing-hero p { font-size: clamp(15px, 2vw, 18px); color: var(--muted); max-width: 580px; margin: 0 auto 12px; line-height: 1.7; }
     .landing-hero .sub { font-size: 14px; color: var(--muted); margin-bottom: 36px; }
@@ -80,7 +74,6 @@
     .landing-footer { text-align: center; padding: 32px; border-top: 1px solid var(--border); font-size: 13px; color: var(--muted); }
     .landing-footer a { color: var(--blue); text-decoration: none; margin: 0 8px; }
 
-    /* ── LOGIN PAGE ── */
     #page-login { background: var(--bg); }
     .login-page-inner { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 80px 24px; }
     .login-box { background: white; border-radius: 20px; padding: 48px 40px; width: 100%; max-width: 440px; border: 1px solid var(--border); box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
@@ -99,50 +92,23 @@
     .login-step { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
     .login-step:last-child { border-bottom: none; }
     .login-step-num { width: 24px; height: 24px; border-radius: 50%; background: var(--light); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: var(--blue); flex-shrink: 0; }
-    .login-step-num.done { background: var(--accent); color: white; }
-    .login-step-num.active { background: var(--blue); color: white; }
     .login-step-text { font-size: 13px; color: var(--muted); }
-    .login-step-text.active { color: var(--text); font-weight: 600; }
     .login-error { background: #fff5f5; border: 1px solid #fed7d7; border-radius: 8px; padding: 12px 16px; font-size: 13px; color: #c53030; margin-top: 12px; display: none; }
-    .login-back { text-align: center; margin-top: 20px; font-size: 13px; color: var(--muted); cursor: pointer; }
+    .login-back { text-align: center; margin-top: 20px; font-size: 13px; color: var(--muted); }
     .login-back a { color: var(--blue); text-decoration: none; font-weight: 600; }
 
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
     @keyframes spin { to{transform:rotate(360deg)} }
 
-    /* ── BROWSE PAGE ── */
     #page-browse { padding-top: 64px; }
-    .browse-filters {
-      background: white; border-bottom: 1px solid var(--border);
-      padding: 14px 32px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-      position: sticky; top: 64px; z-index: 100;
-    }
-    .filter-select {
-      padding: 9px 14px; border: 1.5px solid var(--border); border-radius: 8px;
-      font-size: 14px; font-weight: 500; color: var(--text); background: white;
-      cursor: pointer; outline: none; font-family: 'Inter', sans-serif;
-      appearance: none; padding-right: 28px;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7a8d' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
-      background-repeat: no-repeat; background-position: right 10px center;
-      transition: border-color 0.15s;
-    }
+    .browse-filters { background: white; border-bottom: 1px solid var(--border); padding: 14px 32px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; position: sticky; top: 64px; z-index: 100; }
+    .filter-select { padding: 9px 14px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 14px; font-weight: 500; color: var(--text); background: white; cursor: pointer; outline: none; font-family: 'Inter', sans-serif; appearance: none; padding-right: 28px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7a8d' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; transition: border-color 0.15s; }
     .filter-select:focus { border-color: var(--blue); }
-    .filter-btn {
-      padding: 9px 16px; border: 1.5px solid var(--border); border-radius: 8px;
-      font-size: 14px; font-weight: 500; background: white; cursor: pointer;
-      display: flex; align-items: center; gap: 6px; color: var(--text);
-      font-family: 'Inter', sans-serif; transition: border-color 0.15s;
-    }
-    .filter-btn:hover { border-color: var(--blue-light); }
     .filter-count { font-size: 12px; color: var(--muted); margin-left: auto; font-weight: 500; }
-
     .browse-layout { display: flex; min-height: calc(100vh - 128px); }
-    .browse-sidebar {
-      width: 280px; flex-shrink: 0; background: white; border-right: 1px solid var(--border);
-      padding: 24px; position: sticky; top: 128px; height: calc(100vh - 128px); overflow-y: auto;
-    }
+    .browse-sidebar { width: 280px; flex-shrink: 0; background: white; border-right: 1px solid var(--border); padding: 24px; position: sticky; top: 128px; height: calc(100vh - 128px); overflow-y: auto; }
     .sidebar-section { margin-bottom: 28px; }
-    .sidebar-section h3 { font-size: 13px; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+    .sidebar-section h3 { font-size: 13px; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; }
     .sidebar-section h3 span { font-size: 14px; font-weight: 400; color: var(--muted); }
     .range-track { position: relative; height: 4px; background: var(--border); border-radius: 2px; margin: 12px 0; }
     .range-fill { position: absolute; height: 100%; background: var(--blue); border-radius: 2px; }
@@ -150,25 +116,19 @@
     .range-labels { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); }
     .radio-group { display: flex; flex-direction: column; gap: 10px; }
     .radio-item { display: flex; align-items: center; gap: 10px; cursor: pointer; }
-    .radio-item input { accent-color: var(--blue); width: 16px; height: 16px; cursor: pointer; }
+    .radio-item input { accent-color: var(--blue); width: 16px; height: 16px; }
     .radio-item label { font-size: 14px; color: var(--text); cursor: pointer; }
     .checkbox-group { display: flex; flex-direction: column; gap: 8px; }
-    .checkbox-item { display: flex; align-items: center; gap: 10px; cursor: pointer; }
-    .checkbox-item input { accent-color: var(--blue); width: 15px; height: 15px; cursor: pointer; }
+    .checkbox-item { display: flex; align-items: center; gap: 10px; }
+    .checkbox-item input { accent-color: var(--blue); width: 15px; height: 15px; }
     .checkbox-item label { font-size: 14px; color: var(--text); cursor: pointer; }
-
     .browse-main { flex: 1; padding: 24px 28px; }
     .browse-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
     .browse-header h2 { font-size: 20px; font-weight: 700; color: var(--blue); }
     .browse-header-sub { font-size: 14px; color: var(--muted); }
     .sort-select { padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; color: var(--text); background: white; cursor: pointer; font-family: 'Inter', sans-serif; }
-
     .listings-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-    .listing-card {
-      background: white; border-radius: 14px; overflow: hidden;
-      border: 1px solid var(--border); cursor: pointer;
-      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
-    }
+    .listing-card { background: white; border-radius: 14px; overflow: hidden; border: 1px solid var(--border); cursor: pointer; transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s; }
     .listing-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); border-color: var(--blue-light); }
     .listing-photo { height: 190px; background: #f0f2f5; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
     .listing-photo img { width: 100%; height: 100%; object-fit: cover; }
@@ -181,32 +141,18 @@
     .listing-location { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 4px; margin-bottom: 12px; }
     .listing-view-btn { display: block; width: 100%; padding: 11px; background: var(--blue); color: white; font-size: 14px; font-weight: 600; border-radius: 8px; text-align: center; border: none; cursor: pointer; font-family: 'Inter', sans-serif; transition: background 0.15s; }
     .listing-view-btn:hover { background: var(--blue-mid); }
-
     .browse-loading { text-align: center; padding: 80px; color: var(--muted); font-size: 15px; }
     .browse-empty { text-align: center; padding: 80px 40px; }
     .browse-empty-icon { font-size: 48px; opacity: 0.3; margin-bottom: 16px; }
     .browse-empty h3 { font-size: 20px; font-weight: 700; color: var(--blue); margin-bottom: 8px; }
     .browse-empty p { font-size: 14px; color: var(--muted); }
 
-    /* ── MODAL ── */
-    .modal-overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.5);
-      display: flex; align-items: center; justify-content: center;
-      z-index: 500; padding: 20px; opacity: 0; pointer-events: none;
-      transition: opacity 0.2s;
-    }
+    /* Listing Modal */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 500; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
     .modal-overlay.open { opacity: 1; pointer-events: all; }
-    .modal {
-      background: white; border-radius: 20px; width: 100%; max-width: 900px;
-      max-height: 90vh; overflow-y: auto;
-      transform: scale(0.95); transition: transform 0.2s;
-    }
+    .modal { background: white; border-radius: 20px; width: 100%; max-width: 900px; max-height: 90vh; overflow-y: auto; transform: scale(0.95); transition: transform 0.2s; }
     .modal-overlay.open .modal { transform: scale(1); }
-    .modal-close {
-      position: absolute; top: 16px; right: 16px; width: 32px; height: 32px;
-      border-radius: 50%; background: rgba(0,0,0,0.08); border: none; cursor: pointer;
-      font-size: 16px; display: flex; align-items: center; justify-content: center;
-    }
+    .modal-close { position: absolute; top: 16px; right: 16px; width: 32px; height: 32px; border-radius: 50%; background: rgba(0,0,0,0.08); border: none; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; }
     .modal-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 0; position: relative; }
     .modal-photos { padding: 24px; border-right: 1px solid var(--border); }
     .modal-main-photo { height: 300px; border-radius: 12px; background: var(--light); overflow: hidden; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; }
@@ -244,11 +190,57 @@
     .modal-cta-primary:hover { background: var(--blue-mid); }
     .modal-cta-share { width: 48px; flex: none; background: var(--light); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; border: 1px solid var(--border); }
 
-    /* ── RESPONSIVE ── */
+    /* Side Panel (account + notifications) */
+    .side-panel-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 600; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+    .side-panel-overlay.open { opacity: 1; pointer-events: all; }
+    .side-panel { position: fixed; top: 0; right: 0; bottom: 0; width: 380px; max-width: 100vw; background: white; z-index: 601; box-shadow: -4px 0 24px rgba(0,0,0,0.12); transform: translateX(100%); transition: transform 0.25s ease; overflow-y: auto; }
+    .side-panel-overlay.open .side-panel { transform: translateX(0); }
+    .side-panel-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 24px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: white; z-index: 1; }
+    .side-panel-title { font-size: 18px; font-weight: 800; color: var(--blue); }
+    .side-panel-close { width: 32px; height: 32px; border-radius: 50%; background: var(--light); border: none; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; }
+    .side-panel-body { padding: 24px; }
+
+    /* Account Panel */
+    .account-id-card { background: var(--blue); border-radius: 16px; padding: 24px; margin-bottom: 20px; color: white; }
+    .account-id-label { font-size: 11px; font-weight: 600; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+    .account-id-value { font-size: 28px; font-weight: 800; letter-spacing: 2px; margin-bottom: 12px; }
+    .account-verified-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(0,200,150,0.2); border: 1px solid rgba(0,200,150,0.4); border-radius: 20px; padding: 4px 12px; font-size: 12px; font-weight: 700; color: #00c896; }
+    .account-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+    .account-stat { background: var(--light); border-radius: 12px; padding: 16px; text-align: center; }
+    .account-stat-value { font-size: 24px; font-weight: 800; color: var(--blue); margin-bottom: 4px; }
+    .account-stat-label { font-size: 12px; color: var(--muted); font-weight: 500; }
+    .account-info-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+    .account-info-row:last-child { border-bottom: none; }
+    .account-info-label { color: var(--muted); font-weight: 500; }
+    .account-info-value { color: var(--text); font-weight: 600; }
+    .account-app-notice { background: #f0f7ff; border: 1px solid #bee3f8; border-radius: 12px; padding: 16px; margin-top: 20px; font-size: 13px; color: var(--blue-light); line-height: 1.6; }
+    .account-app-notice strong { display: block; margin-bottom: 4px; font-size: 14px; color: var(--blue); }
+    .account-loading { text-align: center; padding: 40px; color: var(--muted); }
+    .account-logout { width: 100%; margin-top: 20px; padding: 14px; background: #fff5f5; border: 1px solid #fed7d7; border-radius: 10px; color: #c53030; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; }
+    .account-logout:hover { background: #ffe8e8; }
+
+    /* Notifications Panel */
+    .notif-item { display: flex; gap: 14px; padding: 16px 0; border-bottom: 1px solid var(--border); cursor: pointer; }
+    .notif-item:last-child { border-bottom: none; }
+    .notif-item.unread { background: #f8fbff; margin: 0 -24px; padding: 16px 24px; }
+    .notif-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--blue); flex-shrink: 0; margin-top: 6px; }
+    .notif-dot.read { background: transparent; }
+    .notif-content { flex: 1; }
+    .notif-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+    .notif-body { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 4px; }
+    .notif-time { font-size: 11px; color: #a0aab4; }
+    .notif-empty { text-align: center; padding: 60px 20px; }
+    .notif-empty-icon { font-size: 40px; opacity: 0.3; margin-bottom: 12px; }
+    .notif-empty p { color: var(--muted); font-size: 14px; }
+    .notif-mark-read { width: 100%; padding: 10px; background: var(--light); border: 1px solid var(--border); border-radius: 8px; font-size: 13px; color: var(--blue); font-weight: 600; cursor: pointer; margin-bottom: 16px; font-family: 'Inter', sans-serif; }
+    .notif-mark-read:hover { background: var(--border); }
+    .notif-loading { text-align: center; padding: 40px; color: var(--muted); }
+
     @media (max-width: 900px) {
       .modal-inner { grid-template-columns: 1fr; }
       .modal-photos { border-right: none; border-bottom: 1px solid var(--border); }
       .browse-sidebar { display: none; }
+      .side-panel { width: 100vw; }
     }
     @media (max-width: 640px) {
       nav { padding: 0 16px; }
@@ -259,15 +251,14 @@
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
-  <a href="#" class="nav-logo" onclick="showPage('landing')">DVVIA</a>
+  <span class="nav-logo" onclick="showPage('landing')">DVVIA</span>
   <div class="nav-right">
-    <div class="nav-notif" id="nav-notif" onclick="checkNotifications()">
+    <div class="nav-notif" id="nav-notif" onclick="openNotifications()">
       <span class="nav-notif-icon">🔔</span>
       <div class="nav-notif-badge" id="nav-notif-badge"></div>
     </div>
-    <div class="nav-user" id="nav-user">
+    <div class="nav-user" id="nav-user" onclick="openAccount()">
       <div class="nav-user-avatar" id="nav-avatar">?</div>
       <span class="nav-user-id" id="nav-user-id">—</span>
     </div>
@@ -276,7 +267,7 @@
   </div>
 </nav>
 
-<!-- LANDING PAGE -->
+<!-- LANDING -->
 <div id="page-landing" class="page active">
   <div class="landing-hero">
     <h1>A verified vehicle marketplace for buying, selling, and browsing.<br>Transparent and secure.</h1>
@@ -287,35 +278,15 @@
       <button class="btn btn-outline" onclick="showPage('login')">Log In</button>
     </div>
   </div>
-
   <div class="how-it-works">
     <h2>How It Works</h2>
     <div class="how-steps">
-      <div class="how-step">
-        <div class="how-step-icon">📱</div>
-        <h3>Get the App</h3>
-        <p>Download the DVVIA app.</p>
-        <em>Free for individual users.</em>
-      </div>
-      <div class="how-step">
-        <div class="how-step-icon">👤</div>
-        <h3>Create an Account</h3>
-        <p>Submit your government ID and a piece of USPS mail for verification.</p>
-      </div>
-      <div class="how-step">
-        <div class="how-step-icon green">✓</div>
-        <h3>Get Verified</h3>
-        <p>DVVIA reviews your documents within 24 hours and activates your account.</p>
-      </div>
-      <div class="how-step">
-        <div class="how-step-icon">🚗</div>
-        <h3>Buy or Sell</h3>
-        <p>Browse verified listings, post your car, and schedule appointments — all through the app.</p>
-        <em>Website is for browsing only.</em>
-      </div>
+      <div class="how-step"><div class="how-step-icon">📱</div><h3>Get the App</h3><p>Download the DVVIA app.</p><em>Free for individual users.</em></div>
+      <div class="how-step"><div class="how-step-icon">👤</div><h3>Create an Account</h3><p>Submit your government ID and a piece of USPS mail for verification.</p></div>
+      <div class="how-step"><div class="how-step-icon green">✓</div><h3>Get Verified</h3><p>DVVIA reviews your documents within 24 hours and activates your account.</p></div>
+      <div class="how-step"><div class="how-step-icon">🚗</div><h3>Buy or Sell</h3><p>Browse verified listings, post your car, and schedule appointments — all through the app.</p><em>Website is for browsing only.</em></div>
     </div>
   </div>
-
   <div class="landing-footer">
     <a href="https://ykadyrii-jpg.github.io/dvvia-legal/" target="_blank">Privacy Policy</a>
     <a href="mailto:support@dvvia.com">Contact</a>
@@ -323,68 +294,42 @@
   </div>
 </div>
 
-<!-- LOGIN PAGE -->
+<!-- LOGIN -->
 <div id="page-login" class="page">
   <div class="login-page-inner">
     <div class="login-box">
       <h2>Log in to DVVIA</h2>
       <p class="login-sub">Enter your DVVIA ID below. You'll get a notification in the app to approve this login — no password needed on the web.</p>
-
       <div id="login-form-section">
         <label class="login-input-label">Your DVVIA ID</label>
         <input type="text" class="login-input" id="login-dvvia-id" placeholder="DV-0000000" maxlength="12" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')startLogin()" />
         <div class="login-error" id="login-error"></div>
         <button class="btn btn-primary login-btn" onclick="startLogin()">Send Login Request</button>
-
         <div class="login-steps" style="margin-top: 28px;">
-          <div class="login-step">
-            <div class="login-step-num">1</div>
-            <div class="login-step-text">Enter your DVVIA ID</div>
-          </div>
-          <div class="login-step">
-            <div class="login-step-num">2</div>
-            <div class="login-step-text">Open the DVVIA app on your phone</div>
-          </div>
-          <div class="login-step">
-            <div class="login-step-num">3</div>
-            <div class="login-step-text">Tap "Approve" on the login notification</div>
-          </div>
-          <div class="login-step">
-            <div class="login-step-num">4</div>
-            <div class="login-step-text">This page unlocks automatically</div>
-          </div>
+          <div class="login-step"><div class="login-step-num">1</div><div class="login-step-text">Enter your DVVIA ID</div></div>
+          <div class="login-step"><div class="login-step-num">2</div><div class="login-step-text">Open the DVVIA app on your phone</div></div>
+          <div class="login-step"><div class="login-step-num">3</div><div class="login-step-text">Tap "Approve" on the login notification</div></div>
+          <div class="login-step"><div class="login-step-num">4</div><div class="login-step-text">This page unlocks automatically</div></div>
         </div>
       </div>
-
       <div class="login-waiting" id="login-waiting">
         <div class="login-waiting-icon">📱</div>
         <h3>Check your DVVIA app</h3>
         <p>A notification was sent to your phone. Open the DVVIA app and tap <strong>Approve</strong> to log in here.</p>
-        <div style="margin-top: 20px; padding: 14px; background: var(--light); border-radius: 10px; font-size: 13px; color: var(--muted);">
-          Waiting for approval<span id="login-dots">...</span>
-        </div>
+        <div style="margin-top: 20px; padding: 14px; background: var(--light); border-radius: 10px; font-size: 13px; color: var(--muted);">Waiting for approval<span id="login-dots">...</span></div>
         <button onclick="cancelLogin()" style="margin-top: 16px; background: none; border: none; color: var(--muted); font-size: 13px; cursor: pointer; text-decoration: underline;">Cancel</button>
       </div>
-
-      <div class="login-back">
-        <a href="#" onclick="showPage('landing'); return false;">← Back to home</a>
-      </div>
+      <div class="login-back"><a href="#" onclick="showPage('landing'); return false;">← Back to home</a></div>
     </div>
   </div>
 </div>
 
-<!-- BROWSE PAGE -->
+<!-- BROWSE -->
 <div id="page-browse" class="page">
   <div class="browse-filters">
-    <select class="filter-select" id="filter-make" onchange="applyFilters()">
-      <option value="">Make</option>
-    </select>
-    <select class="filter-select" id="filter-model" onchange="applyFilters()">
-      <option value="">Model</option>
-    </select>
-    <select class="filter-select" id="filter-year" onchange="applyFilters()">
-      <option value="">Year</option>
-    </select>
+    <select class="filter-select" id="filter-make" onchange="applyFilters()"><option value="">Make</option></select>
+    <select class="filter-select" id="filter-model" onchange="applyFilters()"><option value="">Model</option></select>
+    <select class="filter-select" id="filter-year" onchange="applyFilters()"><option value="">Year</option></select>
     <select class="filter-select" id="filter-title" onchange="applyFilters()">
       <option value="">Title Status</option>
       <option value="Clean">Clean</option>
@@ -393,24 +338,15 @@
     </select>
     <span class="filter-count" id="filter-count"></span>
   </div>
-
   <div class="browse-layout">
-    <!-- Sidebar -->
     <div class="browse-sidebar">
       <div class="sidebar-section">
         <h3>Seller Type</h3>
         <div class="radio-group">
-          <div class="radio-item">
-            <input type="radio" name="seller-type" id="st-all" value="" checked onchange="applyFilters()" />
-            <label for="st-all">All verified sellers</label>
-          </div>
-          <div class="radio-item">
-            <input type="radio" name="seller-type" id="st-private" value="private" onchange="applyFilters()" />
-            <label for="st-private">Verified Private</label>
-          </div>
+          <div class="radio-item"><input type="radio" name="seller-type" id="st-all" value="" checked onchange="applyFilters()" /><label for="st-all">All verified sellers</label></div>
+          <div class="radio-item"><input type="radio" name="seller-type" id="st-private" value="private" onchange="applyFilters()" /><label for="st-private">Verified Private</label></div>
         </div>
       </div>
-
       <div class="sidebar-section">
         <h3>Mileage Range <span id="mileage-label">Any</span></h3>
         <div class="range-track">
@@ -419,7 +355,6 @@
         </div>
         <div class="range-labels"><span>0</span><span>200k+</span></div>
       </div>
-
       <div class="sidebar-section">
         <h3>Price Range <span id="price-label">Any</span></h3>
         <div class="range-track">
@@ -428,7 +363,6 @@
         </div>
         <div class="range-labels"><span>$0</span><span>$100k+</span></div>
       </div>
-
       <div class="sidebar-section">
         <h3>Transmission</h3>
         <div class="checkbox-group">
@@ -438,14 +372,9 @@
         </div>
       </div>
     </div>
-
-    <!-- Main -->
     <div class="browse-main">
       <div class="browse-header">
-        <div>
-          <h2>Browse Verified Cars</h2>
-          <div class="browse-header-sub" id="browse-sub">Loading...</div>
-        </div>
+        <div><h2>Browse Verified Cars</h2><div class="browse-header-sub" id="browse-sub">Loading...</div></div>
         <select class="sort-select" id="sort-select" onchange="applyFilters()">
           <option value="newest">Newest first</option>
           <option value="price-low">Price: low to high</option>
@@ -453,9 +382,7 @@
           <option value="mileage">Lowest mileage</option>
         </select>
       </div>
-      <div id="listings-container">
-        <div class="browse-loading">Loading verified listings...</div>
-      </div>
+      <div id="listings-container"><div class="browse-loading">Loading verified listings...</div></div>
     </div>
   </div>
 </div>
@@ -465,9 +392,7 @@
   <div class="modal" id="modal">
     <div class="modal-inner">
       <div class="modal-photos">
-        <div class="modal-main-photo" id="modal-main-photo">
-          <div class="modal-main-photo-placeholder">🚗</div>
-        </div>
+        <div class="modal-main-photo" id="modal-main-photo"><div class="modal-main-photo-placeholder">🚗</div></div>
         <div class="modal-thumbs" id="modal-thumbs"></div>
       </div>
       <div class="modal-info">
@@ -485,6 +410,32 @@
   </div>
 </div>
 
+<!-- ACCOUNT SIDE PANEL -->
+<div class="side-panel-overlay" id="account-overlay" onclick="closeSidePanel('account')">
+  <div class="side-panel" onclick="event.stopPropagation()">
+    <div class="side-panel-header">
+      <div class="side-panel-title">My Account</div>
+      <button class="side-panel-close" onclick="closeSidePanel('account')">✕</button>
+    </div>
+    <div class="side-panel-body" id="account-panel-body">
+      <div class="account-loading">Loading account...</div>
+    </div>
+  </div>
+</div>
+
+<!-- NOTIFICATIONS SIDE PANEL -->
+<div class="side-panel-overlay" id="notif-overlay" onclick="closeSidePanel('notif')">
+  <div class="side-panel" onclick="event.stopPropagation()">
+    <div class="side-panel-header">
+      <div class="side-panel-title">Notifications</div>
+      <button class="side-panel-close" onclick="closeSidePanel('notif')">✕</button>
+    </div>
+    <div class="side-panel-body" id="notif-panel-body">
+      <div class="notif-loading">Loading notifications...</div>
+    </div>
+  </div>
+</div>
+
 <script>
   const API = 'https://dvvia-backend-4kdh.onrender.com/api';
   const APP_STORE = 'https://apps.apple.com/app/dvvia/id6760520915';
@@ -494,23 +445,17 @@
   let loginPollInterval = null;
   let loginToken = null;
   let currentVehicle = null;
-  let currentPhotos = [];
   let maxMileage = 200000;
   let maxPrice = 100000;
 
   // ── PAGE ROUTING ──
   function showPage(name) {
-    // Force hide all pages using inline style to beat CSS specificity
     ['landing', 'login', 'browse'].forEach(p => {
       const el = document.getElementById('page-' + p);
       if (el) el.style.display = 'none';
     });
-    // Show the requested page
     const page = document.getElementById('page-' + name);
-    if (page) {
-      page.style.display = 'block';
-      window.scrollTo(0, 0);
-    }
+    if (page) { page.style.display = 'block'; window.scrollTo(0, 0); }
     if (name === 'browse') loadVehicles();
     if (name === 'login') {
       document.getElementById('login-form-section').style.display = 'block';
@@ -521,9 +466,25 @@
     }
   }
 
-  // ── AUTH UI ──
-  function updateNavForUser(user) {
+  // ── SESSION PERSISTENCE ──
+  function checkSession() {
+    try {
+      const stored = sessionStorage.getItem('dvvia_user');
+      if (stored) {
+        const user = JSON.parse(stored);
+        if (user && user.dvviaId) {
+          updateNavForUser(user, false); // false = don't save again
+          return;
+        }
+      }
+    } catch(e) {
+      sessionStorage.removeItem('dvvia_user');
+    }
+  }
+
+  function updateNavForUser(user, save = true) {
     currentUser = user;
+    if (save) sessionStorage.setItem('dvvia_user', JSON.stringify(user));
     document.getElementById('nav-download-btn').style.display = 'none';
     document.getElementById('nav-login-btn').style.display = 'none';
     document.getElementById('nav-notif').style.display = 'flex';
@@ -532,6 +493,141 @@
     document.getElementById('nav-avatar').textContent = initials;
     document.getElementById('nav-user-id').textContent = user.dvviaId;
     showPage('browse');
+    loadUnreadCount();
+  }
+
+  function logout() {
+    sessionStorage.removeItem('dvvia_user');
+    currentUser = null;
+    document.getElementById('nav-download-btn').style.display = '';
+    document.getElementById('nav-login-btn').style.display = '';
+    document.getElementById('nav-notif').style.display = 'none';
+    document.getElementById('nav-user').style.display = 'none';
+    document.getElementById('nav-notif-badge').classList.remove('show');
+    closeSidePanel('account');
+    showPage('landing');
+  }
+
+  // ── UNREAD COUNT ──
+  async function loadUnreadCount() {
+    if (!currentUser?.userId) return;
+    try {
+      const res = await fetch(`${API}/notifications/${currentUser.userId}/unread-count`);
+      const data = await res.json();
+      if (data.count > 0) document.getElementById('nav-notif-badge').classList.add('show');
+      else document.getElementById('nav-notif-badge').classList.remove('show');
+    } catch(e) {}
+  }
+
+  // ── ACCOUNT PANEL ──
+  async function openAccount() {
+    document.getElementById('account-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    const body = document.getElementById('account-panel-body');
+    body.innerHTML = '<div class="account-loading">Loading...</div>';
+    if (!currentUser?.userId) { body.innerHTML = '<div class="account-loading">No user data available.</div>'; return; }
+    try {
+      const res = await fetch(`${API}/auth/profile/${currentUser.userId}`);
+      const data = await res.json();
+      if (!data.success) { body.innerHTML = '<div class="account-loading">Could not load account.</div>'; return; }
+      const u = data.user;
+      const since = new Date(u.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+      body.innerHTML = `
+        <div class="account-id-card">
+          <div class="account-id-label">Your DVVIA ID</div>
+          <div class="account-id-value">${u.dvvia_id}</div>
+          <div class="account-verified-badge">✓ Verified Identity</div>
+        </div>
+        <div class="account-stats">
+          <div class="account-stat">
+            <div class="account-stat-value">${u.totalListings || 0}</div>
+            <div class="account-stat-label">Listings</div>
+          </div>
+          <div class="account-stat">
+            <div class="account-stat-value">${u.totalViewings || 0}</div>
+            <div class="account-stat-label">Viewings</div>
+          </div>
+        </div>
+        <div>
+          <div class="account-info-row">
+            <span class="account-info-label">Member since</span>
+            <span class="account-info-value">${since}</span>
+          </div>
+          <div class="account-info-row">
+            <span class="account-info-label">Status</span>
+            <span class="account-info-value" style="color:#00a371">✓ Verified</span>
+          </div>
+          ${u.phone ? `<div class="account-info-row"><span class="account-info-label">Phone</span><span class="account-info-value">${u.phone}</span></div>` : ''}
+        </div>
+        <div class="account-app-notice">
+          <strong>All transactions happen in the app</strong>
+          To post a listing, request a viewing, or manage appointments — use the DVVIA app on your phone.
+        </div>
+        <a href="${APP_STORE}" target="_blank" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:16px;">Open DVVIA App</a>
+        <button class="account-logout" onclick="logout()">Log Out</button>
+      `;
+    } catch(e) { body.innerHTML = '<div class="account-loading">Error loading account.</div>'; }
+  }
+
+  // ── NOTIFICATIONS PANEL ──
+  async function openNotifications() {
+    document.getElementById('notif-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    const body = document.getElementById('notif-panel-body');
+    body.innerHTML = '<div class="notif-loading">Loading notifications...</div>';
+    if (!currentUser?.userId) { body.innerHTML = '<div class="notif-loading">Please log in to view notifications.</div>'; return; }
+    try {
+      const res = await fetch(`${API}/notifications/${currentUser.userId}`);
+      const data = await res.json();
+      const notifs = data.notifications || [];
+      if (notifs.length === 0) {
+        body.innerHTML = '<div class="notif-empty"><div class="notif-empty-icon">🔔</div><p>No notifications yet.</p></div>';
+        return;
+      }
+      const unread = notifs.filter(n => !n.read_at);
+      let html = '';
+      if (unread.length > 0) html += `<button class="notif-mark-read" onclick="markAllRead()">Mark all as read (${unread.length})</button>`;
+      notifs.forEach(n => {
+        const time = timeAgo(n.created_at);
+        const isUnread = !n.read_at;
+        html += `<div class="notif-item ${isUnread ? 'unread' : ''}">
+          <div class="notif-dot ${isUnread ? '' : 'read'}"></div>
+          <div class="notif-content">
+            <div class="notif-title">${n.title}</div>
+            <div class="notif-body">${n.body}</div>
+            <div class="notif-time">${time}</div>
+          </div>
+        </div>`;
+      });
+      body.innerHTML = html;
+      // Clear badge
+      document.getElementById('nav-notif-badge').classList.remove('show');
+    } catch(e) { body.innerHTML = '<div class="notif-loading">Error loading notifications.</div>'; }
+  }
+
+  async function markAllRead() {
+    if (!currentUser?.userId) return;
+    try {
+      await fetch(`${API}/notifications/${currentUser.userId}/read-all`, { method: 'POST' });
+      openNotifications(); // reload
+    } catch(e) {}
+  }
+
+  function timeAgo(dateStr) {
+    const diff = Date.now() - new Date(dateStr).getTime();
+    const mins = Math.floor(diff / 60000);
+    if (mins < 1) return 'Just now';
+    if (mins < 60) return `${mins}m ago`;
+    const hours = Math.floor(mins / 60);
+    if (hours < 24) return `${hours}h ago`;
+    const days = Math.floor(hours / 24);
+    if (days < 7) return `${days}d ago`;
+    return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  }
+
+  function closeSidePanel(which) {
+    document.getElementById(which + '-overlay').classList.remove('open');
+    document.body.style.overflow = '';
   }
 
   // ── LOGIN FLOW ──
@@ -539,62 +635,41 @@
     const dvviaId = document.getElementById('login-dvvia-id').value.trim().toUpperCase();
     const errorEl = document.getElementById('login-error');
     errorEl.style.display = 'none';
-
     if (!dvviaId.startsWith('DV-') || dvviaId.length < 10) {
       errorEl.textContent = 'Please enter a valid DVVIA ID (e.g. DV-1234567)';
       errorEl.style.display = 'block';
       return;
     }
-
     try {
-      const res = await fetch(`${API}/auth/web-login-request`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ dvviaId })
-      });
+      const res = await fetch(`${API}/auth/web-login-request`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ dvviaId }) });
       const data = await res.json();
-
-      if (!data.success) {
-        errorEl.textContent = data.error || 'DVVIA ID not found. Check and try again.';
-        errorEl.style.display = 'block';
-        return;
-      }
-
+      if (!data.success) { errorEl.textContent = data.error || 'DVVIA ID not found. Check and try again.'; errorEl.style.display = 'block'; return; }
       loginToken = data.token;
       document.getElementById('login-form-section').style.display = 'none';
       document.getElementById('login-waiting').style.display = 'block';
-
-      // Animate dots
       let dots = 0;
       const dotsEl = document.getElementById('login-dots');
-      setInterval(() => { dots = (dots + 1) % 4; dotsEl.textContent = '.'.repeat(dots + 1); }, 600);
-
-      // Poll for approval
+      const dotsInterval = setInterval(() => { dots = (dots + 1) % 4; dotsEl.textContent = '.'.repeat(dots + 1); }, 600);
       loginPollInterval = setInterval(async () => {
         try {
           const pollRes = await fetch(`${API}/auth/web-login-poll/${loginToken}`);
           const pollData = await pollRes.json();
           if (pollData.approved) {
-            clearInterval(loginPollInterval);
+            clearInterval(loginPollInterval); clearInterval(dotsInterval);
             updateNavForUser({ dvviaId: pollData.dvviaId, userId: pollData.userId });
           } else if (pollData.denied) {
-            clearInterval(loginPollInterval);
+            clearInterval(loginPollInterval); clearInterval(dotsInterval);
             cancelLogin();
             errorEl.textContent = 'Login was denied from the app.';
             errorEl.style.display = 'block';
           }
-        } catch (e) {}
+        } catch(e) {}
       }, 2000);
-
-    } catch (err) {
-      errorEl.textContent = 'Could not connect to server. Please try again.';
-      errorEl.style.display = 'block';
-    }
+    } catch(err) { errorEl.textContent = 'Could not connect to server. Please try again.'; errorEl.style.display = 'block'; }
   }
 
   function cancelLogin() {
-    clearInterval(loginPollInterval);
-    loginToken = null;
+    clearInterval(loginPollInterval); loginToken = null;
     document.getElementById('login-form-section').style.display = 'block';
     document.getElementById('login-waiting').style.display = 'none';
   }
@@ -606,9 +681,8 @@
       const res = await fetch(`${API}/vehicles`);
       const data = await res.json();
       allVehicles = data.success ? (data.vehicles || []) : [];
-      populateFilters();
-      applyFilters();
-    } catch (err) {
+      populateFilters(); applyFilters();
+    } catch(err) {
       document.getElementById('listings-container').innerHTML = '<div class="browse-empty"><div class="browse-empty-icon">⚠️</div><h3>Could not load listings</h3><p>Please refresh to try again.</p></div>';
     }
   }
@@ -616,21 +690,16 @@
   function populateFilters() {
     const makes = [...new Set(allVehicles.map(v => v.make).filter(Boolean))].sort();
     const years = [...new Set(allVehicles.map(v => v.year).filter(Boolean))].sort((a, b) => b - a);
-    const makeEl = document.getElementById('filter-make');
-    const yearEl = document.getElementById('filter-year');
-    makeEl.innerHTML = '<option value="">Make</option>' + makes.map(m => `<option value="${m}">${m}</option>`).join('');
-    yearEl.innerHTML = '<option value="">Year</option>' + years.map(y => `<option value="${y}">${y}</option>`).join('');
+    document.getElementById('filter-make').innerHTML = '<option value="">Make</option>' + makes.map(m => `<option value="${m}">${m}</option>`).join('');
+    document.getElementById('filter-year').innerHTML = '<option value="">Year</option>' + years.map(y => `<option value="${y}">${y}</option>`).join('');
   }
 
   function applyFilters() {
     const make = document.getElementById('filter-make').value;
-    const model = document.getElementById('filter-model').value;
     const year = document.getElementById('filter-year').value;
     const title = document.getElementById('filter-title').value;
     const sort = document.getElementById('sort-select').value;
-    const sellerType = document.querySelector('input[name="seller-type"]:checked')?.value || '';
     const transChecked = [...document.querySelectorAll('.checkbox-item input:checked')].map(el => el.value);
-
     let filtered = allVehicles.filter(v => {
       if (make && v.make !== make) return false;
       if (year && String(v.year) !== year) return false;
@@ -640,14 +709,12 @@
       if (transChecked.length > 0 && !transChecked.includes(v.transmission)) return false;
       return true;
     });
-
     filtered.sort((a, b) => {
       if (sort === 'price-low') return a.price - b.price;
       if (sort === 'price-high') return b.price - a.price;
       if (sort === 'mileage') return a.mileage - b.mileage;
       return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
     });
-
     document.getElementById('browse-sub').textContent = `${filtered.length} verified car${filtered.length !== 1 ? 's' : ''} available`;
     document.getElementById('filter-count').textContent = filtered.length + ' results';
     renderListings(filtered);
@@ -655,16 +722,14 @@
 
   function updateMileage(val) {
     maxMileage = Number(val);
-    const pct = (val / 200000) * 100;
-    document.getElementById('mileage-fill').style.width = pct + '%';
+    document.getElementById('mileage-fill').style.width = (val / 200000 * 100) + '%';
     document.getElementById('mileage-label').textContent = val >= 200000 ? 'Any' : Number(val).toLocaleString() + ' mi';
     applyFilters();
   }
 
   function updatePrice(val) {
     maxPrice = Number(val);
-    const pct = (val / 100000) * 100;
-    document.getElementById('price-fill').style.width = pct + '%';
+    document.getElementById('price-fill').style.width = (val / 100000 * 100) + '%';
     document.getElementById('price-label').textContent = val >= 100000 ? 'Any' : '$' + Number(val).toLocaleString();
     applyFilters();
   }
@@ -686,14 +751,19 @@
       const mileage = Number(v.mileage).toLocaleString() + ' mi';
       const days = Math.floor((Date.now() - new Date(v.created_at).getTime()) / 86400000);
       const listed = days === 0 ? 'Today' : days === 1 ? 'Yesterday' : `${days}d ago`;
+      const BASE = 'https://dvvia-backend-4kdh.onrender.com';
+      const photoHtml = v.first_photo
+        ? `<img src="${BASE}/${v.first_photo.replace(/\\/g, '/')}" onerror="this.parentElement.innerHTML='<div class=listing-photo-placeholder>🚗</div>'" />`
+        : '<div class="listing-photo-placeholder">🚗</div>';
       card.innerHTML = `
-        <div class="listing-photo"><div class="listing-photo-placeholder">🚗</div></div>
+        <div class="listing-photo">${photoHtml}</div>
         <div class="listing-body">
           <div class="listing-price">${price}</div>
           <div class="listing-name">${name}</div>
           <div class="listing-tags">
             <span class="listing-tag">${mileage}</span>
             <span class="listing-tag">${v.transmission || 'Auto'}</span>
+            ${v.drivetrain ? `<span class="listing-tag">${v.drivetrain}</span>` : ''}
             <span class="listing-tag">${v.title_status || 'Clean title'}</span>
             <span class="listing-tag">${listed}</span>
           </div>
@@ -711,12 +781,11 @@
     currentVehicle = v;
     const name = `${v.year} ${v.make} ${v.model}${v.trim_level ? ' ' + v.trim_level : ''}`;
     document.getElementById('modal-title').textContent = name;
-
-    // Specs
     const specs = [
       ['Price', '$' + Number(v.price).toLocaleString()],
       ['Mileage', Number(v.mileage).toLocaleString() + ' mi'],
       ['Transmission', v.transmission || '—'],
+      ['Drivetrain', v.drivetrain || '—'],
       ['Title', v.title_status || 'Clean'],
       ['Exterior', v.exterior_color || '—'],
     ];
@@ -725,72 +794,63 @@
       `<div class="modal-spec-row"><span class="modal-spec-label">${l}</span><span class="modal-spec-value">${val}</span></div>`
     ).join('');
 
-    // Condition
     const condFields = [
-      ['Exterior', v.condition_exterior],
-      ['Interior', v.condition_interior],
-      ['Tires', v.condition_tires],
-      ['Mechanical', v.condition_mechanical],
-      ['AC System', v.condition_ac],
-      ['Electronics', v.condition_electronics],
+      ['Exterior', v.condition_exterior], ['Interior', v.condition_interior],
+      ['Tires', v.condition_tires], ['Mechanical', v.condition_mechanical],
+      ['AC System', v.condition_ac], ['Electronics', v.condition_electronics],
+      ['Interior Odor', v.condition_odor], ['Frame Condition', v.condition_frame],
     ].filter(([, val]) => val);
 
     if (condFields.length > 0) {
-      document.getElementById('modal-condition').innerHTML = `
-        <h3>Condition Report</h3>
-        <div class="modal-condition-grid">
-          ${condFields.map(([label, val]) => `
-            <div class="modal-condition-item">
-              <div class="modal-condition-label">${label}</div>
-              <div class="modal-condition-value ${val}">${val}</div>
-            </div>`).join('')}
-        </div>`;
+      document.getElementById('modal-condition').innerHTML = `<h3>Condition Report</h3><div class="modal-condition-grid">${condFields.map(([label, val]) => `<div class="modal-condition-item"><div class="modal-condition-label">${label}</div><div class="modal-condition-value ${val}">${val}</div></div>`).join('')}</div>`;
       document.getElementById('modal-condition').style.display = 'block';
     } else {
       document.getElementById('modal-condition').style.display = 'none';
     }
 
-    // Location
     if (v.meeting_location_name) {
-      document.getElementById('modal-location').innerHTML = `
-        <div class="modal-location-label">📍 Where you'll meet</div>
-        <div class="modal-location-name">${v.meeting_location_name}</div>
-        ${v.meeting_location_address ? `<div class="modal-location-addr">${v.meeting_location_address}</div>` : ''}
-        <div class="modal-location-note">Public location chosen by DVVIA — the seller cannot change this.</div>`;
+      document.getElementById('modal-location').innerHTML = `<div class="modal-location-label">📍 Where you'll meet</div><div class="modal-location-name">${v.meeting_location_name}</div>${v.meeting_location_address ? `<div class="modal-location-addr">${v.meeting_location_address}</div>` : ''}<div class="modal-location-note">Public location chosen by DVVIA — the seller cannot change this.</div>`;
       document.getElementById('modal-location').style.display = 'block';
     } else {
       document.getElementById('modal-location').style.display = 'none';
     }
 
-    // Photos placeholder for now
-    document.getElementById('modal-main-photo').innerHTML = '<div class="modal-main-photo-placeholder">🚗</div>';
-    document.getElementById('modal-thumbs').innerHTML = '';
+    // Load photos
+    const BASE = 'https://dvvia-backend-4kdh.onrender.com';
+    if (v.first_photo) {
+      fetch(`${API}/vehicles/${v.id}`).then(r => r.json()).then(data => {
+        if (data.photos && data.photos.length > 0) {
+          const urls = data.photos.map(p => `${BASE}/${p.photo_path.replace(/\\/g, '/')}`);
+          document.getElementById('modal-main-photo').innerHTML = `<img src="${urls[0]}" style="width:100%;height:100%;object-fit:cover" />`;
+          if (urls.length > 1) {
+            document.getElementById('modal-thumbs').innerHTML = urls.map((url, i) =>
+              `<div class="modal-thumb ${i === 0 ? 'active' : ''}" onclick="switchModalPhoto('${url}', this)"><img src="${url}" /></div>`
+            ).join('');
+          }
+        }
+      }).catch(() => {});
+    } else {
+      document.getElementById('modal-main-photo').innerHTML = '<div class="modal-main-photo-placeholder">🚗</div>';
+      document.getElementById('modal-thumbs').innerHTML = '';
+    }
 
     document.getElementById('modal-overlay').classList.add('open');
     document.body.style.overflow = 'hidden';
   }
 
-  function closeModal(e) {
-    if (e.target === document.getElementById('modal-overlay')) closeModalBtn();
+  function switchModalPhoto(url, thumbEl) {
+    document.getElementById('modal-main-photo').innerHTML = `<img src="${url}" style="width:100%;height:100%;object-fit:cover" />`;
+    document.querySelectorAll('.modal-thumb').forEach(t => t.classList.remove('active'));
+    thumbEl.classList.add('active');
   }
 
-  function closeModalBtn() {
-    document.getElementById('modal-overlay').classList.remove('open');
-    document.body.style.overflow = '';
-  }
-
+  function closeModal(e) { if (e.target === document.getElementById('modal-overlay')) closeModalBtn(); }
+  function closeModalBtn() { document.getElementById('modal-overlay').classList.remove('open'); document.body.style.overflow = ''; }
   function openAppStore() { window.open(APP_STORE, '_blank'); }
-  function shareVehicle() {
-    if (navigator.share && currentVehicle) {
-      navigator.share({ title: `${currentVehicle.year} ${currentVehicle.make} ${currentVehicle.model}`, url: window.location.href });
-    }
-  }
+  function shareVehicle() { if (navigator.share && currentVehicle) { navigator.share({ title: `${currentVehicle.year} ${currentVehicle.make} ${currentVehicle.model}`, url: window.location.href }); } }
 
-  function checkNotifications() { /* placeholder */ }
-
-  // Run on page load
+  // Run on load
   checkSession();
-
 </script>
 </body>
 </html>
