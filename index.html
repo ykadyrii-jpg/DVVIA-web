@@ -817,7 +817,7 @@
     }
 
     // Load photos
-    const BASE = 'dvvia-backend-1.onrender.com';
+    const BASE = 'https://dvvia-backend-1.onrender.com';
     if (v.first_photo) {
       fetch(`${API}/vehicles/${v.id}`).then(r => r.json()).then(data => {
         if (data.photos && data.photos.length > 0) {
