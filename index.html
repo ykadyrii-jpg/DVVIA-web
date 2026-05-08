@@ -435,7 +435,7 @@
 </div>
 
 <script>
-  const API = 'https://dvvia-backend-4kdh.onrender.com/api';
+  const API = 'https://dvvia-backend-1.onrender.com/api';
   const APP_STORE = 'https://apps.apple.com/app/dvvia/id6760520915';
 
   let currentUser = null;
@@ -749,7 +749,7 @@
       const mileage = Number(v.mileage).toLocaleString() + ' mi';
       const days = Math.floor((Date.now() - new Date(v.created_at).getTime()) / 86400000);
       const listed = days === 0 ? 'Today' : days === 1 ? 'Yesterday' : `${days}d ago`;
-      const BASE = 'https://dvvia-backend-4kdh.onrender.com';
+      const BASE = 'https://dvvia-backend-1.onrender.com';
       const photoHtml = v.first_photo
         ? `<img src="${BASE}/${v.first_photo.replace(/\\/g, '/')}" onerror="this.parentElement.innerHTML='<div class=listing-photo-placeholder>🚗</div>'" />`
         : '<div class="listing-photo-placeholder">🚗</div>';
@@ -814,7 +814,7 @@
     }
 
     // Load photos
-    const BASE = 'https://dvvia-backend-4kdh.onrender.com';
+    const BASE = 'https://dvvia-backend-1.onrender.com';
     if (v.first_photo) {
       fetch(`${API}/vehicles/${v.id}`).then(r => r.json()).then(data => {
         if (data.photos && data.photos.length > 0) {
