@@ -150,11 +150,11 @@
     /* Listing Modal */
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 500; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
     .modal-overlay.open { opacity: 1; pointer-events: all; }
-    .modal { background: white; border-radius: 20px; width: 100%; max-width: 900px; max-height: 90vh; overflow-y: auto; transform: scale(0.95); transition: transform 0.2s; }
+    .modal { background: white; border-radius: 20px; width: 100%; max-width: 680px; max-height: 95vh; overflow-y: auto; transform: scale(0.95); transition: transform 0.2s; }
     .modal-overlay.open .modal { transform: scale(1); }
     .modal-close { position: absolute; top: 16px; right: 16px; width: 32px; height: 32px; border-radius: 50%; background: rgba(0,0,0,0.08); border: none; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; }
-    .modal-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 0; position: relative; }
-    .modal-photos { padding: 24px; border-right: 1px solid var(--border); }
+    .modal-inner { display: flex; flex-direction: column; position: relative; }
+    .modal-photos { padding: 24px 24px 0 24px; border-bottom: 1px solid var(--border); }
     .modal-main-photo { height: 300px; border-radius: 12px; background: var(--light); overflow: hidden; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; }
     .modal-main-photo img { width: 100%; height: 100%; object-fit: contain; background: #f0f2f5; }
     .modal-main-photo-placeholder { font-size: 72px; opacity: 0.2; }
@@ -162,7 +162,7 @@
     .modal-thumb { width: 70px; height: 56px; border-radius: 8px; overflow: hidden; flex-shrink: 0; border: 2px solid transparent; cursor: pointer; background: var(--light); display: flex; align-items: center; justify-content: center; font-size: 20px; opacity: 0.4; transition: border-color 0.15s, opacity 0.15s; }
     .modal-thumb.active { border-color: var(--blue); opacity: 1; }
     .modal-thumb img { width: 100%; height: 100%; object-fit: cover; }
-    .modal-info { padding: 28px; overflow-y: auto; max-height: 90vh; }
+    .modal-info { padding: 24px; overflow-y: auto; max-height: 60vh; }
     .modal-title { font-size: 24px; font-weight: 800; color: var(--blue); margin-bottom: 20px; }
     .modal-specs { background: var(--light); border-radius: 12px; padding: 16px; margin-bottom: 18px; }
     .modal-spec-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid rgba(0,0,0,0.06); font-size: 14px; }
@@ -237,8 +237,6 @@
     .notif-loading { text-align: center; padding: 40px; color: var(--muted); }
 
     @media (max-width: 900px) {
-      .modal-inner { grid-template-columns: 1fr; }
-      .modal-photos { border-right: none; border-bottom: 1px solid var(--border); }
       .browse-sidebar { display: none; }
       .side-panel { width: 100vw; }
     }
@@ -335,7 +333,6 @@
       <option value="Clean">Clean</option>
       <option value="Salvage">Salvage</option>
       <option value="Rebuilt">Rebuilt</option>
-      <option value="Lien title">Lien title</option>
     </select>
     <span class="filter-count" id="filter-count"></span>
   </div>
@@ -344,8 +341,8 @@
       <div class="sidebar-section">
         <h3>Seller Type</h3>
         <div class="radio-group">
-          <div class="radio-item"><input type="radio" name="seller-type" id="st-all" value="" checked onchange="applyFilters()" /><label for="st-all">All sellers</label></div>
-          <div class="radio-item"><input type="radio" name="seller-type" id="st-private" value="private" onchange="applyFilters()" /><label for="st-private">Private sellers</label></div>
+          <div class="radio-item"><input type="radio" name="seller-type" id="st-all" value="" checked onchange="applyFilters()" /><label for="st-all">All verified sellers</label></div>
+          <div class="radio-item"><input type="radio" name="seller-type" id="st-private" value="private" onchange="applyFilters()" /><label for="st-private">Verified Private</label></div>
         </div>
       </div>
       <div class="sidebar-section">
@@ -438,7 +435,7 @@
 </div>
 
 <script>
-  const API = 'https://dvvia-backend-1.onrender.com/api';
+  const API = 'https://dvvia-backend-4kdh.onrender.com/api';
   const APP_STORE = 'https://apps.apple.com/app/dvvia/id6760520915';
 
   let currentUser = null;
@@ -752,7 +749,7 @@
       const mileage = Number(v.mileage).toLocaleString() + ' mi';
       const days = Math.floor((Date.now() - new Date(v.created_at).getTime()) / 86400000);
       const listed = days === 0 ? 'Today' : days === 1 ? 'Yesterday' : `${days}d ago`;
-      const BASE = 'https://dvvia-backend-1.onrender.com';
+      const BASE = 'https://dvvia-backend-4kdh.onrender.com';
       const photoHtml = v.first_photo
         ? `<img src="${BASE}/${v.first_photo.replace(/\\/g, '/')}" onerror="this.parentElement.innerHTML='<div class=listing-photo-placeholder>🚗</div>'" />`
         : '<div class="listing-photo-placeholder">🚗</div>';
@@ -817,7 +814,7 @@
     }
 
     // Load photos
-    const BASE = 'https://dvvia-backend-1.onrender.com';
+    const BASE = 'https://dvvia-backend-4kdh.onrender.com';
     if (v.first_photo) {
       fetch(`${API}/vehicles/${v.id}`).then(r => r.json()).then(data => {
         if (data.photos && data.photos.length > 0) {
