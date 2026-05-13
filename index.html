@@ -685,7 +685,7 @@
       fetch(`${API}/vehicles/${v.id}`).then(r=>r.json()).then(data=>{
         if(data.photos&&data.photos.length>0) {
           const urls=data.photos.map(p=>`${BASE}/${p.photo_path.replace(/\\/g,'/')}`);
-          document.getElementById('modal-main-photo').innerHTML=`<img src="${urls[0]}" style="width:100%;height:100%;object-fit:cover;object-position:top" />`;
+          document.getElementById('modal-main-photo').innerHTML=`<img src="${urls[0]}" style="width:100%;height:100%;object-fit:contain;background:#1a1a1a" />`;
           if(urls.length>1) {
             document.getElementById('modal-thumbs').innerHTML=urls.map((url,i)=>`<div class="modal-thumb ${i===0?'active':''}" onclick="switchModalPhoto('${url}',this)"><img src="${url}" /></div>`).join('');
           }
