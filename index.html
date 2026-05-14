@@ -4,12 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DVVIA — Verified Car Marketplace</title>
+  <meta name="description" content="A verified vehicle marketplace. Every seller is verified. Every listing is reviewed." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     :root {
       --blue: #1a3a5c;
       --blue-mid: #1e4976;
+      --blue-light: #2563a8;
       --accent: #00c896;
       --bg: #f5f6f8;
       --white: #ffffff;
@@ -17,179 +19,666 @@
       --text: #1a2535;
       --muted: #6b7a8d;
       --light: #f0f2f5;
-      --dark-card: #1c1c1e; /* Matches app dark theme */
     }
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; }
 
-    /* Navigation */
-    nav { position: fixed; top: 0; width: 100%; z-index: 200; display: flex; justify-content: space-between; align-items: center; padding: 0 24px; height: 64px; background: var(--white); border-bottom: 1px solid var(--border); }
-    .nav-logo { font-size: 24px; font-weight: 800; color: var(--blue); cursor: pointer; }
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; display: flex; justify-content: space-between; align-items: center; padding: 0 40px; height: 64px; background: white; border-bottom: 1px solid var(--border); box-shadow: 0 1px 8px rgba(0,0,0,0.06); }
+    .nav-logo { font-size: 26px; font-weight: 800; color: var(--blue); cursor: pointer; letter-spacing: -1px; }
     .nav-right { display: flex; align-items: center; gap: 12px; }
-
-    /* Buttons */
-    .btn { padding: 10px 18px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; transition: 0.15s; text-decoration: none; }
+    .nav-notif { position: relative; cursor: pointer; padding: 8px; display: none; }
+    .nav-notif-badge { position: absolute; top: 4px; right: 4px; width: 8px; height: 8px; border-radius: 50%; background: #e53e3e; display: none; }
+    .nav-notif-badge.show { display: block; }
+    .nav-user { display: none; align-items: center; gap: 8px; cursor: pointer; padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border); }
+    .nav-user:hover { background: var(--light); }
+    .nav-user-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--blue); display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: 700; }
+    .nav-user-id { font-size: 13px; font-weight: 600; }
+    .btn { padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: all 0.15s; font-family: 'Inter', sans-serif; }
     .btn-primary { background: var(--blue); color: white; }
+    .btn-primary:hover { background: var(--blue-mid); }
     .btn-outline { background: transparent; color: var(--blue); border: 1.5px solid var(--blue); }
+    .btn-outline:hover { background: var(--light); }
 
-    /* Page Layouts */
-    .page { display: none; padding-top: 80px; min-height: 100vh; }
+    /* PAGES */
+    .page { display: none; min-height: 100vh; }
     .page.active { display: block; }
 
-    /* Browse Layout (Based on Screen Shot 2026-05-14 at 1.30.08 AM.jpg) */
-    .browse-container { display: flex; max-width: 1400px; margin: 0 auto; padding: 0 20px; gap: 24px; }
-    .sidebar { width: 260px; flex-shrink: 0; position: sticky; top: 80px; height: fit-content; }
-    .main-content { flex: 1; }
+    /* LANDING */
+    #page-landing { background: white; }
+    .landing-hero { text-align: center; padding: 140px 24px 80px; max-width: 780px; margin: 0 auto; }
+    .landing-hero h1 { font-size: clamp(32px,5vw,52px); font-weight: 800; color: var(--blue); line-height: 1.15; letter-spacing: -1px; margin-bottom: 20px; }
+    .landing-hero p { font-size: clamp(15px,2vw,18px); color: var(--muted); max-width: 580px; margin: 0 auto 12px; line-height: 1.7; }
+    .landing-hero .sub { font-size: 14px; color: var(--muted); margin-bottom: 36px; }
+    .landing-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 60px; }
+    .how-it-works { background: var(--light); border-radius: 20px; padding: 48px 40px; max-width: 1100px; margin: 0 auto 60px; }
+    .how-it-works h2 { text-align: center; font-size: 22px; font-weight: 700; color: var(--blue); margin-bottom: 40px; }
+    .how-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 32px; }
+    .how-step { text-align: center; }
+    .how-step-icon { width: 56px; height: 56px; border-radius: 50%; background: white; display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 14px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+    .how-step-icon.green { background: var(--accent); }
+    .how-step h3 { font-size: 15px; font-weight: 700; color: var(--blue); margin-bottom: 6px; }
+    .how-step p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+    .how-step em { font-style: italic; color: var(--muted); font-size: 12px; display: block; margin-top: 4px; }
+    .landing-footer { text-align: center; padding: 32px; border-top: 1px solid var(--border); font-size: 13px; color: var(--muted); }
+    .landing-footer a { color: var(--blue); text-decoration: none; margin: 0 8px; }
 
-    /* Car Cards (Refined to match Screenshots) */
-    .listings-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; padding-bottom: 40px; }
-    .card { background: var(--white); border-radius: 12px; overflow: hidden; border: 1px solid var(--border); cursor: pointer; transition: transform 0.2s; }
-    .card:hover { transform: translateY(-4px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-    .card-img { height: 220px; width: 100%; background: #000; position: relative; }
-    .card-img img { width: 100%; height: 100%; object-fit: cover; } /* Fixed path scaling */
-    .card-content { padding: 16px; }
-    .card-price { font-size: 24px; font-weight: 800; color: var(--blue); }
-    .card-title { font-size: 15px; font-weight: 600; margin: 4px 0 12px; }
-    .card-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-    .tag { font-size: 12px; background: var(--light); padding: 4px 8px; border-radius: 4px; color: var(--muted); font-weight: 500; }
-    .tag-green { color: var(--accent); font-weight: 700; }
+    /* LOGIN */
+    #page-login { background: var(--bg); }
+    .login-wrap { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 80px 24px; }
+    .login-box { background: white; border-radius: 20px; padding: 48px 40px; width: 100%; max-width: 440px; border: 1px solid var(--border); box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+    .login-box h2 { font-size: 24px; font-weight: 800; color: var(--blue); margin-bottom: 8px; }
+    .login-sub { font-size: 14px; color: var(--muted); margin-bottom: 32px; line-height: 1.6; }
+    .field-label { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; display: block; }
+    .field-input { width: 100%; padding: 14px 16px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 16px; font-weight: 600; font-family: 'Inter',sans-serif; color: var(--text); outline: none; transition: border-color 0.15s; letter-spacing: 1px; }
+    .field-input:focus { border-color: var(--blue); }
+    .field-input::placeholder { color: #c0c8d4; font-weight: 400; letter-spacing: 0; }
+    .login-btn { width: 100%; margin-top: 16px; padding: 16px; font-size: 15px; border-radius: 10px; }
+    .login-error { background: #fff5f5; border: 1px solid #fed7d7; border-radius: 8px; padding: 12px 16px; font-size: 13px; color: #c53030; margin-top: 12px; display: none; }
+    .login-waiting { display: none; text-align: center; padding: 24px 0; }
+    .login-waiting-icon { font-size: 40px; margin-bottom: 12px; animation: pulse 1.5s infinite; }
+    .login-waiting h3 { font-size: 17px; font-weight: 700; color: var(--blue); margin-bottom: 8px; }
+    .login-waiting p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+    .waiting-box { margin-top: 20px; padding: 14px; background: var(--light); border-radius: 10px; font-size: 13px; color: var(--muted); }
+    .login-steps { margin-top: 24px; }
+    .login-step { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .login-step:last-child { border-bottom: none; }
+    .step-num { width: 24px; height: 24px; border-radius: 50%; background: var(--light); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: var(--blue); flex-shrink: 0; }
+    .login-back { text-align: center; margin-top: 20px; font-size: 13px; color: var(--muted); }
+    .login-back a { color: var(--blue); text-decoration: none; font-weight: 600; }
+    @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.4} }
 
-    /* Modal (Matches Screen Shot 2026-05-14 at 1.30.33 AM.jpg) */
-    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 500; padding: 20px; }
-    .modal-overlay.open { display: flex; }
-    .modal { background: white; width: 100%; max-width: 800px; border-radius: 16px; max-height: 90vh; overflow-y: auto; }
-    .modal-hero { width: 100%; height: 450px; background: #000; position: relative; }
-    .modal-hero img { width: 100%; height: 100%; object-fit: cover; }
-    .modal-body { padding: 24px; }
-    .spec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0; }
-    .spec-item { border-bottom: 1px solid var(--border); padding: 8px 0; display: flex; justify-content: space-between; }
-    .condition-tag { font-weight: 700; color: #00a371; }
+    /* BROWSE */
+    #page-browse { padding-top: 64px; }
+    .browse-filters { background: white; border-bottom: 1px solid var(--border); padding: 14px 32px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; position: sticky; top: 64px; z-index: 100; }
+    .filter-select { padding: 9px 14px; border: 1.5px solid var(--border); border-radius: 8px; font-size: 14px; font-weight: 500; color: var(--text); background: white; cursor: pointer; outline: none; font-family: 'Inter',sans-serif; appearance: none; padding-right: 28px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7a8d' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; }
+    .filter-select:focus { border-color: var(--blue); }
+    .filter-count { font-size: 12px; color: var(--muted); margin-left: auto; font-weight: 500; }
+    .browse-layout { display: flex; min-height: calc(100vh - 128px); }
+    .browse-sidebar { width: 280px; flex-shrink: 0; background: white; border-right: 1px solid var(--border); padding: 24px; position: sticky; top: 128px; height: calc(100vh - 128px); overflow-y: auto; }
+    .sidebar-section { margin-bottom: 28px; }
+    .sidebar-section h3 { font-size: 13px; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; }
+    .sidebar-section h3 span { font-size: 14px; font-weight: 400; color: var(--muted); }
+    .range-track { position: relative; height: 4px; background: var(--border); border-radius: 2px; margin: 12px 0; }
+    .range-fill { position: absolute; height: 100%; background: var(--blue); border-radius: 2px; }
+    .range-input { position: absolute; width: 100%; top: -7px; opacity: 0; cursor: pointer; height: 18px; }
+    .range-labels { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); }
+    .radio-group { display: flex; flex-direction: column; gap: 10px; }
+    .radio-item { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+    .radio-item input { accent-color: var(--blue); width: 16px; height: 16px; }
+    .radio-item label { font-size: 14px; color: var(--text); cursor: pointer; }
+    .checkbox-group { display: flex; flex-direction: column; gap: 8px; }
+    .checkbox-item { display: flex; align-items: center; gap: 10px; }
+    .checkbox-item input { accent-color: var(--blue); width: 15px; height: 15px; }
+    .checkbox-item label { font-size: 14px; color: var(--text); cursor: pointer; }
+    .browse-main { flex: 1; padding: 24px 28px; }
+    .browse-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .browse-header h2 { font-size: 20px; font-weight: 700; color: var(--blue); }
+    .browse-header-sub { font-size: 14px; color: var(--muted); }
+    .sort-select { padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; color: var(--text); background: white; cursor: pointer; font-family: 'Inter',sans-serif; }
+    .listings-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 20px; }
+    .listing-card { background: white; border-radius: 14px; overflow: hidden; border: 1px solid var(--border); cursor: pointer; transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s; }
+    .listing-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); border-color: var(--blue-light); }
+    /* Square photo frame for listing cards */
+    .listing-photo { width: 100%; aspect-ratio: 1 / 1; background: #111; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    .listing-photo img { width: 100%; height: 100%; object-fit: contain; }
+    .listing-photo-placeholder { font-size: 56px; opacity: 0.25; }
+    .listing-body { padding: 16px; }
+    .listing-price { font-size: 22px; font-weight: 800; color: var(--blue); margin-bottom: 3px; }
+    .listing-name { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+    .listing-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+    .listing-tag { font-size: 12px; color: var(--muted); background: var(--light); border-radius: 5px; padding: 3px 8px; font-weight: 500; }
+    .listing-tag-lien { font-size: 12px; color: #92400e; background: #fef3c7; border-radius: 5px; padding: 3px 8px; font-weight: 600; border: 1px solid #fcd34d; }
+    .listing-location { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 4px; margin-bottom: 12px; }
+    .listing-view-btn { display: block; width: 100%; padding: 11px; background: var(--blue); color: white; font-size: 14px; font-weight: 600; border-radius: 8px; text-align: center; border: none; cursor: pointer; font-family: 'Inter',sans-serif; transition: background 0.15s; }
+    .listing-view-btn:hover { background: var(--blue-mid); }
+    .browse-loading { text-align: center; padding: 80px; color: var(--muted); }
+    .browse-empty { text-align: center; padding: 80px 40px; }
+    .browse-empty-icon { font-size: 48px; opacity: 0.3; margin-bottom: 16px; }
+    .browse-empty h3 { font-size: 20px; font-weight: 700; color: var(--blue); margin-bottom: 8px; }
+    .browse-empty p { font-size: 14px; color: var(--muted); }
+
+    /* MODAL */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.55); display: flex; align-items: center; justify-content: center; z-index: 500; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal { background: white; border-radius: 20px; width: 100%; max-width: 780px; max-height: 92vh; overflow-y: auto; transform: scale(0.96); transition: transform 0.2s; }
+    .modal-overlay.open .modal { transform: scale(1); }
+    .modal-inner { display: flex; flex-direction: column; position: relative; }
+    .modal-close { position: absolute; top: 16px; right: 16px; width: 32px; height: 32px; border-radius: 50%; background: rgba(0,0,0,0.08); border: none; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; z-index: 10; }
+    /* Square photo area in modal — shows full photo without cropping */
+    .modal-photo-area { background: #111; padding: 16px; }
+    .modal-main-photo { width: 100%; aspect-ratio: 1 / 1; background: #111; border-radius: 12px; overflow: hidden; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; }
+    .modal-main-photo img { width: 100%; height: 100%; object-fit: contain; }
+    .modal-main-photo-placeholder { font-size: 72px; opacity: 0.2; }
+    .modal-thumbs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
+    .modal-thumb { width: 64px; height: 64px; border-radius: 8px; overflow: hidden; flex-shrink: 0; border: 2px solid transparent; cursor: pointer; background: #222; display: flex; align-items: center; justify-content: center; opacity: 0.5; transition: border-color 0.15s, opacity 0.15s; }
+    .modal-thumb.active { border-color: var(--accent); opacity: 1; }
+    .modal-thumb img { width: 100%; height: 100%; object-fit: contain; }
+    .modal-info { padding: 24px; }
+    .modal-title { font-size: 24px; font-weight: 800; color: var(--blue); margin-bottom: 16px; }
+    .lien-warning { background: #fffbf0; border: 1px solid #f6c947; border-radius: 10px; padding: 14px; margin-bottom: 16px; display: flex; gap: 12px; align-items: flex-start; }
+    .lien-warning-icon { font-size: 20px; flex-shrink: 0; }
+    .lien-warning-title { font-size: 14px; font-weight: 700; color: #92400e; margin-bottom: 4px; }
+    .lien-warning-body { font-size: 13px; color: #78350f; line-height: 1.5; }
+    .modal-specs { background: var(--light); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+    .modal-spec-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid rgba(0,0,0,0.06); font-size: 14px; }
+    .modal-spec-row:last-child { border-bottom: none; }
+    .modal-spec-label { color: var(--muted); font-weight: 500; }
+    .modal-spec-value { color: var(--text); font-weight: 600; text-align: right; }
+    .modal-condition { margin-bottom: 16px; }
+    .modal-condition h3 { font-size: 13px; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px; }
+    .modal-condition-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+    .modal-condition-item { background: var(--light); border-radius: 8px; padding: 10px 12px; }
+    .modal-condition-label { font-size: 11px; color: var(--muted); font-weight: 500; margin-bottom: 3px; }
+    .modal-condition-value { font-size: 13px; font-weight: 700; }
+    .modal-condition-value.Excellent { color: #00a371; }
+    .modal-condition-value.Good { color: #2b6cb0; }
+    .modal-condition-value.Fair { color: #c07a00; }
+    .modal-condition-value.Poor { color: #c53030; }
+    .modal-location { background: #f0f7ff; border: 1px solid #bee3f8; border-radius: 10px; padding: 14px; margin-bottom: 16px; }
+    .modal-location-label { font-size: 11px; font-weight: 700; color: var(--blue-light); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
+    .modal-location-name { font-size: 15px; font-weight: 700; color: var(--blue); margin-bottom: 2px; }
+    .modal-location-addr { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+    .modal-location-note { font-size: 12px; color: var(--blue-light); line-height: 1.5; }
+    .modal-cta-row { display: flex; gap: 10px; }
+    .modal-cta { flex: 1; padding: 14px; border-radius: 10px; font-size: 15px; font-weight: 700; text-align: center; cursor: pointer; border: none; font-family: 'Inter',sans-serif; transition: all 0.15s; }
+    .modal-cta-primary { background: var(--blue); color: white; }
+    .modal-cta-primary:hover { background: var(--blue-mid); }
+    .modal-cta-share { width: 48px; flex: none; background: var(--light); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; border: 1px solid var(--border); }
+
+    /* SIDE PANELS */
+    .side-panel-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 600; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+    .side-panel-overlay.open { opacity: 1; pointer-events: all; }
+    .side-panel { position: fixed; top: 0; right: 0; bottom: 0; width: 380px; max-width: 100vw; background: white; z-index: 601; box-shadow: -4px 0 24px rgba(0,0,0,0.12); transform: translateX(100%); transition: transform 0.25s ease; overflow-y: auto; }
+    .side-panel-overlay.open .side-panel { transform: translateX(0); }
+    .side-panel-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 24px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: white; z-index: 1; }
+    .side-panel-title { font-size: 18px; font-weight: 800; color: var(--blue); }
+    .side-panel-close { width: 32px; height: 32px; border-radius: 50%; background: var(--light); border: none; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; }
+    .side-panel-body { padding: 24px; }
+    .account-id-card { background: var(--blue); border-radius: 16px; padding: 24px; margin-bottom: 20px; color: white; }
+    .account-id-label { font-size: 11px; font-weight: 600; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+    .account-id-value { font-size: 28px; font-weight: 800; letter-spacing: 2px; margin-bottom: 12px; }
+    .account-verified-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(0,200,150,0.2); border: 1px solid rgba(0,200,150,0.4); border-radius: 20px; padding: 4px 12px; font-size: 12px; font-weight: 700; color: #00c896; }
+    .account-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+    .account-stat { background: var(--light); border-radius: 12px; padding: 16px; text-align: center; }
+    .account-stat-value { font-size: 24px; font-weight: 800; color: var(--blue); margin-bottom: 4px; }
+    .account-stat-label { font-size: 12px; color: var(--muted); font-weight: 500; }
+    .account-info-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+    .account-info-row:last-child { border-bottom: none; }
+    .account-info-label { color: var(--muted); font-weight: 500; }
+    .account-info-value { color: var(--text); font-weight: 600; }
+    .account-app-notice { background: #f0f7ff; border: 1px solid #bee3f8; border-radius: 12px; padding: 16px; margin-top: 20px; font-size: 13px; color: var(--blue-light); line-height: 1.6; }
+    .account-app-notice strong { display: block; margin-bottom: 4px; font-size: 14px; color: var(--blue); }
+    .account-loading { text-align: center; padding: 40px; color: var(--muted); }
+    .account-logout { width: 100%; margin-top: 20px; padding: 14px; background: #fff5f5; border: 1px solid #fed7d7; border-radius: 10px; color: #c53030; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'Inter',sans-serif; }
+    .notif-item { display: flex; gap: 14px; padding: 16px 0; border-bottom: 1px solid var(--border); }
+    .notif-item:last-child { border-bottom: none; }
+    .notif-item.unread { background: #f8fbff; margin: 0 -24px; padding: 16px 24px; }
+    .notif-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--blue); flex-shrink: 0; margin-top: 6px; }
+    .notif-dot.read { background: transparent; }
+    .notif-content { flex: 1; }
+    .notif-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+    .notif-body { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 4px; }
+    .notif-time { font-size: 11px; color: #a0aab4; }
+    .notif-empty { text-align: center; padding: 60px 20px; }
+    .notif-empty-icon { font-size: 40px; opacity: 0.3; margin-bottom: 12px; }
+    .notif-empty p { color: var(--muted); font-size: 14px; }
+    .notif-mark-read { width: 100%; padding: 10px; background: var(--light); border: 1px solid var(--border); border-radius: 8px; font-size: 13px; color: var(--blue); font-weight: 600; cursor: pointer; margin-bottom: 16px; font-family: 'Inter',sans-serif; }
+    .notif-loading { text-align: center; padding: 40px; color: var(--muted); }
+
+    @media (max-width: 900px) { .browse-sidebar { display: none; } .side-panel { width: 100vw; } }
+    @media (max-width: 640px) { nav { padding: 0 16px; } .browse-filters { padding: 10px 16px; } .browse-main { padding: 16px; } }
   </style>
 </head>
 <body>
 
 <nav>
-  <div class="nav-logo" onclick="showPage('landing')">DVVIA</div>
-  <div class="nav-right" id="nav-actions">
-    <button class="btn btn-outline" onclick="showPage('login')">Log In</button>
-    <a href="https://apps.apple.com/app/dvvia/id6760520915" class="btn btn-primary">Get App</a>
+  <span class="nav-logo" onclick="showPage('landing')">DVVIA</span>
+  <div class="nav-right">
+    <div class="nav-notif" id="nav-notif" onclick="openNotifications()">
+      <span style="font-size:20px">🔔</span>
+      <div class="nav-notif-badge" id="nav-notif-badge"></div>
+    </div>
+    <div class="nav-user" id="nav-user" onclick="openAccount()">
+      <div class="nav-user-avatar" id="nav-avatar">?</div>
+      <span class="nav-user-id" id="nav-user-id">—</span>
+    </div>
+    <a href="https://apps.apple.com/app/dvvia/id6760520915" target="_blank" class="btn btn-primary" id="nav-download-btn">Download App</a>
+    <button class="btn btn-outline" id="nav-login-btn" onclick="showPage('login')">Log In</button>
   </div>
 </nav>
 
-<!-- Landing Page -->
+<!-- LANDING -->
 <div id="page-landing" class="page active">
-  <div style="text-align: center; max-width: 800px; margin: 80px auto;">
-    <h1 style="font-size: 48px; color: var(--blue);">Verified Vehicle Marketplace</h1>
-    <p style="color: var(--muted); margin: 20px 0;">No scams. Every seller and listing is verified by DVVIA.</p>
-    <button class="btn btn-primary" onclick="showPage('browse')">Browse Cars</button>
+  <div class="landing-hero">
+    <h1>A verified vehicle marketplace for buying, selling, and browsing.<br>Transparent and secure.</h1>
+    <p>DVVIA ensures every user — buyer, seller, or viewer — is verified, creating a trusted environment with no logical room for deceit.</p>
+    <p class="sub">No one has to provide personal email, phone, or address to buy or sell cars.</p>
+    <div class="landing-buttons">
+      <a href="https://apps.apple.com/app/dvvia/id6760520915" target="_blank" class="btn btn-primary">Download the App to Create an Account</a>
+      <button class="btn btn-outline" onclick="showPage('login')">Log In</button>
+    </div>
+  </div>
+  <div class="how-it-works">
+    <h2>How It Works</h2>
+    <div class="how-steps">
+      <div class="how-step"><div class="how-step-icon">📱</div><h3>Get the App</h3><p>Download the DVVIA app.</p><em>Free for individual users.</em></div>
+      <div class="how-step"><div class="how-step-icon">👤</div><h3>Create an Account</h3><p>Submit your government ID and a piece of USPS mail for verification.</p></div>
+      <div class="how-step"><div class="how-step-icon green">✓</div><h3>Get Verified</h3><p>DVVIA reviews your documents within 24 hours and activates your account.</p></div>
+      <div class="how-step"><div class="how-step-icon">🚗</div><h3>Buy or Sell</h3><p>Browse verified listings, post your car, and schedule appointments — all through the app.</p><em>Website is for browsing only.</em></div>
+    </div>
+  </div>
+  <div class="landing-footer">
+    <a href="https://ykadyrii-jpg.github.io/dvvia-legal/" target="_blank">Privacy Policy</a>
+    <a href="mailto:support@dvvia.com">Contact</a>
+    <span>© 2026 DVVIA</span>
   </div>
 </div>
 
-<!-- Browse Page -->
-<div id="page-browse" class="page">
-  <div class="browse-container">
-    <aside class="sidebar">
-      <h3 style="font-size: 12px; text-transform: uppercase; margin-bottom: 16px;">Filters</h3>
-      <!-- Filter implementation simplified for brevity -->
-      <select onchange="filterListings()" id="filter-make" style="width:100%; padding:8px; margin-bottom:10px;"><option value="">All Makes</option></select>
-      <div style="margin-top:20px;">
-        <p style="font-size:12px; font-weight:700;">Price Range</p>
-        <input type="range" style="width:100%;" min="0" max="100000" id="price-range" oninput="filterListings()">
+<!-- LOGIN -->
+<div id="page-login" class="page">
+  <div class="login-wrap">
+    <div class="login-box">
+      <h2>Log in to DVVIA</h2>
+      <p class="login-sub">Enter your DVVIA ID below. You'll get a notification in the app to approve this login — no password needed on the web.</p>
+      <div id="login-form-section">
+        <label class="field-label">Your DVVIA ID</label>
+        <input type="text" class="field-input" id="login-dvvia-id" placeholder="DV-0000000" maxlength="12" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')startLogin()" />
+        <div class="login-error" id="login-error"></div>
+        <button class="btn btn-primary login-btn" onclick="startLogin()">Send Login Request</button>
+        <div class="login-steps" style="margin-top:28px">
+          <div class="login-step"><div class="step-num">1</div><div style="font-size:13px;color:var(--muted)">Enter your DVVIA ID</div></div>
+          <div class="login-step"><div class="step-num">2</div><div style="font-size:13px;color:var(--muted)">Open the DVVIA app on your phone</div></div>
+          <div class="login-step"><div class="step-num">3</div><div style="font-size:13px;color:var(--muted)">Tap "Approve" on the login notification</div></div>
+          <div class="login-step"><div class="step-num">4</div><div style="font-size:13px;color:var(--muted)">This page unlocks automatically</div></div>
+        </div>
       </div>
-    </aside>
-    <main class="main-content">
-      <h2 id="browse-count">Loading listings...</h2>
-      <div class="listings-grid" id="listings-container"></div>
-    </main>
-  </div>
-</div>
-
-<!-- Vehicle Modal -->
-<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
-  <div class="modal">
-    <div class="modal-hero" id="modal-img-container"></div>
-    <div class="modal-body">
-      <h2 id="modal-title" style="color: var(--blue);"></h2>
-      <div class="spec-grid" id="modal-specs"></div>
-      <div id="modal-conditions" style="margin-top: 20px;"></div>
-      <button class="btn btn-primary" style="width:100%; padding:16px; margin-top:20px;" onclick="window.open('https://apps.apple.com/app/dvvia/id6760520915')">Schedule Viewing in App</button>
+      <div class="login-waiting" id="login-waiting">
+        <div class="login-waiting-icon">📱</div>
+        <h3>Check your DVVIA app</h3>
+        <p>A notification was sent to your phone. Open the DVVIA app and tap <strong>Approve</strong> to log in here.</p>
+        <div class="waiting-box">Waiting for approval<span id="login-dots">...</span></div>
+        <button onclick="cancelLogin()" style="margin-top:16px;background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;text-decoration:underline">Cancel</button>
+      </div>
+      <div class="login-back"><a href="#" onclick="showPage('landing');return false">← Back to home</a></div>
     </div>
   </div>
 </div>
 
-<script>
-  const API_BASE = 'https://dvvia-backend-1.onrender.com';
-  let vehicles = [];
-
-  function showPage(pageId) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById(`page-${pageId}`).classList.add('active');
-    if(pageId === 'browse') loadData();
-  }
-
-  async function loadData() {
-    try {
-      const res = await fetch(`${API_BASE}/api/vehicles`);
-      const data = await res.json();
-      vehicles = data.vehicles || [];
-      renderListings(vehicles);
-    } catch (e) {
-      console.error("Load failed", e);
-    }
-  }
-
-  function renderListings(list) {
-    const container = document.getElementById('listings-container');
-    document.getElementById('browse-count').innerText = `${list.length} verified cars available`;
-    container.innerHTML = list.map(v => {
-      const imgPath = v.first_photo ? `${API_BASE}/${v.first_photo.replace(/\\/g, '/')}` : '';
-      return `
-        <div class="card" onclick="openVehicle(${v.id})">
-          <div class="card-img"><img src="${imgPath}" alt="Car"></div>
-          <div class="card-content">
-            <div class="card-price">$${v.price.toLocaleString()}</div>
-            <div class="card-title">${v.year} ${v.make} ${v.model}</div>
-            <div class="card-tags">
-              <span class="tag">${v.mileage.toLocaleString()} mi</span>
-              <span class="tag">${v.transmission}</span>
-              <span class="tag">${v.title_status}</span>
-            </div>
-          </div>
+<!-- BROWSE -->
+<div id="page-browse" class="page">
+  <div class="browse-filters">
+    <select class="filter-select" id="filter-make" onchange="applyFilters()"><option value="">Make</option></select>
+    <select class="filter-select" id="filter-model" onchange="applyFilters()"><option value="">Model</option></select>
+    <select class="filter-select" id="filter-year" onchange="applyFilters()"><option value="">Year</option></select>
+    <select class="filter-select" id="filter-title" onchange="applyFilters()">
+      <option value="">Title Status</option>
+      <option value="Clean">Clean</option>
+      <option value="Salvage">Salvage</option>
+      <option value="Rebuilt">Rebuilt</option>
+      <option value="Lien">Lien Title</option>
+    </select>
+    <span class="filter-count" id="filter-count"></span>
+  </div>
+  <div class="browse-layout">
+    <div class="browse-sidebar">
+      <div class="sidebar-section">
+        <h3>Seller Type</h3>
+        <div class="radio-group">
+          <div class="radio-item"><input type="radio" name="seller-type" id="st-all" value="" checked onchange="applyFilters()"><label for="st-all">All verified sellers</label></div>
+          <div class="radio-item"><input type="radio" name="seller-type" id="st-private" value="private" onchange="applyFilters()"><label for="st-private">Verified Private</label></div>
         </div>
-      `;
-    }).join('');
-  }
-
-  function openVehicle(id) {
-    const v = vehicles.find(item => item.id === id);
-    if(!v) return;
-    
-    document.getElementById('modal-title').innerText = `${v.year} ${v.make} ${v.model}`;
-    const imgPath = v.first_photo ? `${API_BASE}/${v.first_photo.replace(/\\/g, '/')}` : '';
-    document.getElementById('modal-img-container').innerHTML = `<img src="${imgPath}">`;
-    
-    document.getElementById('modal-specs').innerHTML = `
-      <div class="spec-item"><span>Price</span><strong>$${v.price.toLocaleString()}</strong></div>
-      <div class="spec-item"><span>Mileage</span><strong>${v.mileage.toLocaleString()} mi</strong></div>
-      <div class="spec-item"><span>Transmission</span><strong>${v.transmission}</strong></div>
-      <div class="spec-item"><span>VIN</span><strong>${v.vin}</strong></div>
-    `;
-
-    document.getElementById('modal-conditions').innerHTML = `
-      <h3>Condition Report</h3>
-      <div class="spec-grid">
-        <div class="spec-item"><span>Exterior</span><span class="condition-tag">${v.condition_exterior}</span></div>
-        <div class="spec-item"><span>Interior</span><span class="condition-tag">${v.condition_interior}</span></div>
       </div>
-    `;
+      <div class="sidebar-section">
+        <h3>Mileage Range <span id="mileage-label">Any</span></h3>
+        <div class="range-track"><div class="range-fill" id="mileage-fill" style="width:100%"></div><input type="range" class="range-input" id="mileage-range" min="0" max="200000" step="5000" value="200000" oninput="updateMileage(this.value)"></div>
+        <div class="range-labels"><span>0</span><span>200k+</span></div>
+      </div>
+      <div class="sidebar-section">
+        <h3>Price Range <span id="price-label">Any</span></h3>
+        <div class="range-track"><div class="range-fill" id="price-fill" style="width:100%"></div><input type="range" class="range-input" id="price-range" min="0" max="100000" step="1000" value="100000" oninput="updatePrice(this.value)"></div>
+        <div class="range-labels"><span>$0</span><span>$100k+</span></div>
+      </div>
+      <div class="sidebar-section">
+        <h3>Transmission</h3>
+        <div class="checkbox-group">
+          <div class="checkbox-item"><input type="checkbox" id="trans-auto" value="Automatic" onchange="applyFilters()"><label for="trans-auto">Automatic</label></div>
+          <div class="checkbox-item"><input type="checkbox" id="trans-manual" value="Manual" onchange="applyFilters()"><label for="trans-manual">Manual</label></div>
+          <div class="checkbox-item"><input type="checkbox" id="trans-cvt" value="CVT" onchange="applyFilters()"><label for="trans-cvt">CVT</label></div>
+        </div>
+      </div>
+    </div>
+    <div class="browse-main">
+      <div class="browse-header">
+        <div><h2>Browse Verified Cars</h2><div class="browse-header-sub" id="browse-sub">Loading...</div></div>
+        <select class="sort-select" id="sort-select" onchange="applyFilters()">
+          <option value="newest">Newest first</option>
+          <option value="price-low">Price: low to high</option>
+          <option value="price-high">Price: high to low</option>
+          <option value="mileage">Lowest mileage</option>
+        </select>
+      </div>
+      <div id="listings-container"><div class="browse-loading">Loading verified listings...</div></div>
+    </div>
+  </div>
+</div>
 
-    document.getElementById('modal-overlay').classList.add('open');
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-inner">
+      <button class="modal-close" onclick="closeModalBtn()">✕</button>
+      <div class="modal-photo-area">
+        <div class="modal-main-photo" id="modal-main-photo"><div class="modal-main-photo-placeholder">🚗</div></div>
+        <div class="modal-thumbs" id="modal-thumbs"></div>
+      </div>
+      <div class="modal-info">
+        <div class="modal-title" id="modal-title"></div>
+        <div id="modal-lien" style="display:none"></div>
+        <div class="modal-specs" id="modal-specs"></div>
+        <div class="modal-condition" id="modal-condition" style="display:none"></div>
+        <div class="modal-location" id="modal-location" style="display:none"></div>
+        <div class="modal-cta-row">
+          <button class="modal-cta modal-cta-primary" onclick="window.open('https://apps.apple.com/app/dvvia/id6760520915','_blank')">Schedule viewing through the DVVIA app</button>
+          <div class="modal-cta-share" onclick="shareVehicle()" title="Share">⎋</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ACCOUNT PANEL -->
+<div class="side-panel-overlay" id="account-overlay" onclick="closeSidePanel('account')">
+  <div class="side-panel" onclick="event.stopPropagation()">
+    <div class="side-panel-header"><div class="side-panel-title">My Account</div><button class="side-panel-close" onclick="closeSidePanel('account')">✕</button></div>
+    <div class="side-panel-body" id="account-panel-body"><div class="account-loading">Loading account...</div></div>
+  </div>
+</div>
+
+<!-- NOTIFICATIONS PANEL -->
+<div class="side-panel-overlay" id="notif-overlay" onclick="closeSidePanel('notif')">
+  <div class="side-panel" onclick="event.stopPropagation()">
+    <div class="side-panel-header"><div class="side-panel-title">Notifications</div><button class="side-panel-close" onclick="closeSidePanel('notif')">✕</button></div>
+    <div class="side-panel-body" id="notif-panel-body"><div class="notif-loading">Loading notifications...</div></div>
+  </div>
+</div>
+
+<script>
+const API = 'https://dvvia-backend-1.onrender.com/api';
+const BASE = 'https://dvvia-backend-1.onrender.com';
+const APP_STORE = 'https://apps.apple.com/app/dvvia/id6760520915';
+let currentUser = null, allVehicles = [], loginPollInterval = null, loginToken = null, currentVehicle = null, maxMileage = 200000, maxPrice = 100000;
+
+function showPage(name) {
+  ['landing','login','browse'].forEach(p => { const el = document.getElementById('page-'+p); if(el) el.style.display='none'; });
+  const page = document.getElementById('page-'+name);
+  if(page) { page.style.display='block'; window.scrollTo(0,0); }
+  if(name==='browse') loadVehicles();
+  if(name==='login') {
+    document.getElementById('login-form-section').style.display='block';
+    document.getElementById('login-waiting').style.display='none';
+    document.getElementById('login-error').style.display='none';
+    const el = document.getElementById('login-dvvia-id'); if(el) el.value='';
+  }
+}
+
+function checkSession() {
+  try {
+    const stored = sessionStorage.getItem('dvvia_user');
+    if(stored) { const u = JSON.parse(stored); if(u && u.dvviaId) { updateNav(u, false); return; } }
+  } catch(e) { sessionStorage.removeItem('dvvia_user'); }
+}
+
+function updateNav(user, save=true) {
+  currentUser = user;
+  if(save) sessionStorage.setItem('dvvia_user', JSON.stringify(user));
+  document.getElementById('nav-download-btn').style.display='none';
+  document.getElementById('nav-login-btn').style.display='none';
+  document.getElementById('nav-notif').style.display='flex';
+  document.getElementById('nav-user').style.display='flex';
+  document.getElementById('nav-avatar').textContent = user.dvviaId ? user.dvviaId.slice(3,5) : 'DV';
+  document.getElementById('nav-user-id').textContent = user.dvviaId;
+  showPage('browse');
+  loadUnreadCount();
+}
+
+function logout() {
+  sessionStorage.removeItem('dvvia_user'); currentUser = null;
+  document.getElementById('nav-download-btn').style.display='';
+  document.getElementById('nav-login-btn').style.display='';
+  document.getElementById('nav-notif').style.display='none';
+  document.getElementById('nav-user').style.display='none';
+  document.getElementById('nav-notif-badge').classList.remove('show');
+  closeSidePanel('account'); showPage('landing');
+}
+
+async function loadUnreadCount() {
+  if(!currentUser?.userId) return;
+  try {
+    const r = await fetch(`${API}/notifications/${currentUser.userId}/unread-count`);
+    const d = await r.json();
+    if(d.count > 0) document.getElementById('nav-notif-badge').classList.add('show');
+    else document.getElementById('nav-notif-badge').classList.remove('show');
+  } catch(e) {}
+}
+
+async function openAccount() {
+  document.getElementById('account-overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  const body = document.getElementById('account-panel-body');
+  body.innerHTML='<div class="account-loading">Loading...</div>';
+  if(!currentUser?.userId) { body.innerHTML='<div class="account-loading">No user data.</div>'; return; }
+  try {
+    const r = await fetch(`${API}/auth/profile/${currentUser.userId}`);
+    const d = await r.json();
+    if(!d.success) { body.innerHTML='<div class="account-loading">Could not load account.</div>'; return; }
+    const u = d.user;
+    const since = new Date(u.created_at).toLocaleDateString('en-US',{month:'long',year:'numeric'});
+    body.innerHTML = `
+      <div class="account-id-card"><div class="account-id-label">Your DVVIA ID</div><div class="account-id-value">${u.dvvia_id}</div><div class="account-verified-badge">✓ Verified Identity</div></div>
+      <div class="account-stats"><div class="account-stat"><div class="account-stat-value">${u.totalListings||0}</div><div class="account-stat-label">Listings</div></div><div class="account-stat"><div class="account-stat-value">${u.totalViewings||0}</div><div class="account-stat-label">Viewings</div></div></div>
+      <div><div class="account-info-row"><span class="account-info-label">Member since</span><span class="account-info-value">${since}</span></div><div class="account-info-row"><span class="account-info-label">Status</span><span class="account-info-value" style="color:#00a371">✓ Verified</span></div>${u.phone?`<div class="account-info-row"><span class="account-info-label">Phone</span><span class="account-info-value">${u.phone}</span></div>`:''}</div>
+      <div class="account-app-notice"><strong>All transactions happen in the app</strong>To post a listing, request a viewing, or manage appointments — use the DVVIA app.</div>
+      <a href="${APP_STORE}" target="_blank" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:16px">Open DVVIA App</a>
+      <button class="account-logout" onclick="logout()">Log Out</button>`;
+  } catch(e) { body.innerHTML='<div class="account-loading">Error loading account.</div>'; }
+}
+
+async function openNotifications() {
+  document.getElementById('notif-overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  const body = document.getElementById('notif-panel-body');
+  body.innerHTML='<div class="notif-loading">Loading...</div>';
+  if(!currentUser?.userId) { body.innerHTML='<div class="notif-loading">Please log in.</div>'; return; }
+  try {
+    const r = await fetch(`${API}/notifications/${currentUser.userId}`);
+    const d = await r.json();
+    const notifs = d.notifications||[];
+    if(notifs.length===0) { body.innerHTML='<div class="notif-empty"><div class="notif-empty-icon">🔔</div><p>No notifications yet.</p></div>'; return; }
+    const unread = notifs.filter(n=>!n.read_at);
+    let html = unread.length > 0 ? `<button class="notif-mark-read" onclick="markAllRead()">Mark all as read (${unread.length})</button>` : '';
+    notifs.forEach(n => {
+      const isUnread = !n.read_at;
+      html += `<div class="notif-item ${isUnread?'unread':''}"><div class="notif-dot ${isUnread?'':'read'}"></div><div class="notif-content"><div class="notif-title">${n.title}</div><div class="notif-body">${n.body}</div><div class="notif-time">${timeAgo(n.created_at)}</div></div></div>`;
+    });
+    body.innerHTML = html;
+    document.getElementById('nav-notif-badge').classList.remove('show');
+  } catch(e) { body.innerHTML='<div class="notif-loading">Error loading.</div>'; }
+}
+
+async function markAllRead() {
+  if(!currentUser?.userId) return;
+  try { await fetch(`${API}/notifications/${currentUser.userId}/read-all`,{method:'POST'}); openNotifications(); } catch(e) {}
+}
+
+function timeAgo(dateStr) {
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const mins = Math.floor(diff/60000);
+  if(mins<1) return 'Just now'; if(mins<60) return `${mins}m ago`;
+  const h = Math.floor(mins/60); if(h<24) return `${h}h ago`;
+  const days = Math.floor(h/24); if(days<7) return `${days}d ago`;
+  return new Date(dateStr).toLocaleDateString('en-US',{month:'short',day:'numeric'});
+}
+
+function closeSidePanel(w) { document.getElementById(w+'-overlay').classList.remove('open'); document.body.style.overflow=''; }
+
+async function startLogin() {
+  const dvviaId = document.getElementById('login-dvvia-id').value.trim().toUpperCase();
+  const errEl = document.getElementById('login-error');
+  errEl.style.display='none';
+  if(!dvviaId.startsWith('DV-')||dvviaId.length<10) { errEl.textContent='Please enter a valid DVVIA ID (e.g. DV-1234567)'; errEl.style.display='block'; return; }
+  try {
+    const r = await fetch(`${API}/auth/web-login-request`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({dvviaId})});
+    const d = await r.json();
+    if(!d.success) { errEl.textContent=d.error||'DVVIA ID not found.'; errEl.style.display='block'; return; }
+    loginToken = d.token;
+    document.getElementById('login-form-section').style.display='none';
+    document.getElementById('login-waiting').style.display='block';
+    let dots=0; const dotsEl=document.getElementById('login-dots');
+    const di = setInterval(()=>{ dots=(dots+1)%4; dotsEl.textContent='.'.repeat(dots+1); },600);
+    loginPollInterval = setInterval(async()=>{
+      try {
+        const pr = await fetch(`${API}/auth/web-login-poll/${loginToken}`);
+        const pd = await pr.json();
+        if(pd.approved) { clearInterval(loginPollInterval); clearInterval(di); updateNav({dvviaId:pd.dvviaId,userId:pd.userId}); }
+        else if(pd.denied) { clearInterval(loginPollInterval); clearInterval(di); cancelLogin(); errEl.textContent='Login was denied from the app.'; errEl.style.display='block'; }
+      } catch(e) {}
+    },2000);
+  } catch(e) { errEl.textContent='Could not connect to server. Please try again.'; errEl.style.display='block'; }
+}
+
+function cancelLogin() {
+  clearInterval(loginPollInterval); loginToken=null;
+  document.getElementById('login-form-section').style.display='block';
+  document.getElementById('login-waiting').style.display='none';
+}
+
+async function loadVehicles() {
+  document.getElementById('listings-container').innerHTML='<div class="browse-loading">Loading verified listings...</div>';
+  try {
+    const r = await fetch(`${API}/vehicles`);
+    const d = await r.json();
+    allVehicles = d.success?(d.vehicles||[]):[];
+    populateFilters(); applyFilters();
+  } catch(e) {
+    document.getElementById('listings-container').innerHTML='<div class="browse-empty"><div class="browse-empty-icon">⚠️</div><h3>Could not load listings</h3><p>Please refresh to try again.</p></div>';
+  }
+}
+
+function populateFilters() {
+  const makes = [...new Set(allVehicles.map(v=>v.make).filter(Boolean))].sort();
+  const years = [...new Set(allVehicles.map(v=>v.year).filter(Boolean))].sort((a,b)=>b-a);
+  document.getElementById('filter-make').innerHTML = '<option value="">Make</option>'+makes.map(m=>`<option value="${m}">${m}</option>`).join('');
+  document.getElementById('filter-year').innerHTML = '<option value="">Year</option>'+years.map(y=>`<option value="${y}">${y}</option>`).join('');
+}
+
+function applyFilters() {
+  const make=document.getElementById('filter-make').value, year=document.getElementById('filter-year').value;
+  const title=document.getElementById('filter-title').value, sort=document.getElementById('sort-select').value;
+  const trans=[...document.querySelectorAll('.checkbox-item input:checked')].map(el=>el.value);
+  let list = allVehicles.filter(v=>{
+    if(make&&v.make!==make) return false;
+    if(year&&String(v.year)!==year) return false;
+    if(title&&v.title_status!==title) return false;
+    if(v.mileage>maxMileage||v.price>maxPrice) return false;
+    if(trans.length>0&&!trans.includes(v.transmission)) return false;
+    return true;
+  });
+  list.sort((a,b)=>{ if(sort==='price-low') return a.price-b.price; if(sort==='price-high') return b.price-a.price; if(sort==='mileage') return a.mileage-b.mileage; return new Date(b.created_at).getTime()-new Date(a.created_at).getTime(); });
+  document.getElementById('browse-sub').textContent=`${list.length} verified car${list.length!==1?'s':''} available`;
+  document.getElementById('filter-count').textContent=list.length+' results';
+  renderListings(list);
+}
+
+function updateMileage(val) { maxMileage=Number(val); document.getElementById('mileage-fill').style.width=(val/200000*100)+'%'; document.getElementById('mileage-label').textContent=val>=200000?'Any':Number(val).toLocaleString()+' mi'; applyFilters(); }
+function updatePrice(val) { maxPrice=Number(val); document.getElementById('price-fill').style.width=(val/100000*100)+'%'; document.getElementById('price-label').textContent=val>=100000?'Any':'$'+Number(val).toLocaleString(); applyFilters(); }
+
+function renderListings(vehicles) {
+  const container = document.getElementById('listings-container');
+  if(vehicles.length===0) { container.innerHTML='<div class="browse-empty"><div class="browse-empty-icon">🚗</div><h3>No listings match your filters</h3><p>Try adjusting your search.</p></div>'; return; }
+  const grid = document.createElement('div'); grid.className='listings-grid';
+  vehicles.forEach(v=>{
+    const card = document.createElement('div'); card.className='listing-card'; card.onclick=()=>openModal(v);
+    const price='$'+Number(v.price).toLocaleString();
+    const name=`${v.year} ${v.make} ${v.model}${v.trim_level?' '+v.trim_level:''}`;
+    const mileage=Number(v.mileage).toLocaleString()+' mi';
+    const days=Math.floor((Date.now()-new Date(v.created_at).getTime())/86400000);
+    const listed=days===0?'Today':days===1?'Yesterday':`${days}d ago`;
+    const photoHtml=v.first_photo?`<img src="${BASE}/${v.first_photo.replace(/\\/g,'/')}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=listing-photo-placeholder>🚗</div>'" />`:'<div class="listing-photo-placeholder">🚗</div>';
+    const titleTag=v.title_status==='Lien'?'<span class="listing-tag-lien">⚠️ Lien Title</span>':`<span class="listing-tag">${v.title_status||'Clean title'}</span>`;
+    card.innerHTML=`
+      <div class="listing-photo">${photoHtml}</div>
+      <div class="listing-body">
+        <div class="listing-price">${price}</div>
+        <div class="listing-name">${name}</div>
+        <div class="listing-tags"><span class="listing-tag">${mileage}</span><span class="listing-tag">${v.transmission||'Auto'}</span>${v.drivetrain?`<span class="listing-tag">${v.drivetrain}</span>`:''}${titleTag}<span class="listing-tag">${listed}</span></div>
+        ${v.meeting_location_name?`<div class="listing-location">📍 ${v.meeting_location_name}</div>`:''}
+        <button class="listing-view-btn">View Details</button>
+      </div>`;
+    grid.appendChild(card);
+  });
+  container.innerHTML=''; container.appendChild(grid);
+}
+
+function openModal(v) {
+  currentVehicle = v;
+  document.getElementById('modal-title').textContent=`${v.year} ${v.make} ${v.model}${v.trim_level?' '+v.trim_level:''}`;
+
+  // Lien warning
+  const lienDiv = document.getElementById('modal-lien');
+  if(v.title_status==='Lien') {
+    lienDiv.innerHTML='<div class="lien-warning"><div class="lien-warning-icon">⚠️</div><div><div class="lien-warning-title">This vehicle has a lien on the title</div><div class="lien-warning-body">A lien means the seller still owes money to a lender. The title is clean — no accidents — but the outstanding loan must be paid off before ownership can transfer to you.</div></div></div>';
+    lienDiv.style.display='block';
+  } else { lienDiv.style.display='none'; }
+
+  // Specs
+  const specs=[['Price','$'+Number(v.price).toLocaleString()],['Mileage',Number(v.mileage).toLocaleString()+' mi'],['Transmission',v.transmission||'—'],['Drivetrain',v.drivetrain||'—'],['Title',v.title_status||'Clean'],['Exterior',v.exterior_color||'—']];
+  if(v.vin&&v.vin!=='PENDING') specs.push(['VIN',v.vin]);
+  document.getElementById('modal-specs').innerHTML=specs.map(([l,val])=>`<div class="modal-spec-row"><span class="modal-spec-label">${l}</span><span class="modal-spec-value">${val}</span></div>`).join('');
+
+  // Condition
+  const condFields=[['Exterior',v.condition_exterior],['Interior',v.condition_interior],['Tires',v.condition_tires],['Mechanical',v.condition_mechanical],['AC System',v.condition_ac],['Electronics',v.condition_electronics],['Interior Odor',v.condition_odor],['Frame Condition',v.condition_frame]].filter(([,val])=>val);
+  const condDiv=document.getElementById('modal-condition');
+  if(condFields.length>0) { condDiv.innerHTML=`<h3>Condition Report</h3><div class="modal-condition-grid">${condFields.map(([label,val])=>`<div class="modal-condition-item"><div class="modal-condition-label">${label}</div><div class="modal-condition-value ${val}">${val}</div></div>`).join('')}</div>`; condDiv.style.display='block'; }
+  else { condDiv.style.display='none'; }
+
+  // Location
+  const locDiv=document.getElementById('modal-location');
+  if(v.meeting_location_name) { locDiv.innerHTML=`<div class="modal-location-label">📍 Where you'll meet</div><div class="modal-location-name">${v.meeting_location_name}</div>${v.meeting_location_address?`<div class="modal-location-addr">${v.meeting_location_address}</div>`:''}<div class="modal-location-note">Public location chosen by DVVIA — the seller cannot change this.</div>`; locDiv.style.display='block'; }
+  else { locDiv.style.display='none'; }
+
+  // Photos — square frame with contain so full photo always visible
+  const mainPhoto=document.getElementById('modal-main-photo');
+  const thumbs=document.getElementById('modal-thumbs');
+  mainPhoto.innerHTML='<div class="modal-main-photo-placeholder">🚗</div>';
+  thumbs.innerHTML='';
+  if(v.first_photo) {
+    fetch(`${API}/vehicles/${v.id}`).then(r=>r.json()).then(data=>{
+      if(data.photos&&data.photos.length>0) {
+        const urls=data.photos.map(p=>`${BASE}/${p.photo_path.replace(/\\/g,'/')}`);
+        mainPhoto.innerHTML=`<img src="${urls[0]}" style="width:100%;height:100%;object-fit:contain" />`;
+        if(urls.length>1) {
+          thumbs.innerHTML=urls.map((url,i)=>`<div class="modal-thumb ${i===0?'active':''}" onclick="switchPhoto('${url}',this)"><img src="${url}" loading="lazy" /></div>`).join('');
+        }
+      }
+    }).catch(()=>{});
   }
 
-  function closeModal(e) {
-    if(e.target.id === 'modal-overlay') document.getElementById('modal-overlay').classList.remove('open');
-  }
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function switchPhoto(url, el) {
+  document.getElementById('modal-main-photo').innerHTML=`<img src="${url}" style="width:100%;height:100%;object-fit:contain" />`;
+  document.querySelectorAll('.modal-thumb').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function closeModal(e) { if(e.target===document.getElementById('modal-overlay')) closeModalBtn(); }
+function closeModalBtn() { document.getElementById('modal-overlay').classList.remove('open'); document.body.style.overflow=''; }
+function shareVehicle() { if(navigator.share&&currentVehicle) navigator.share({title:`${currentVehicle.year} ${currentVehicle.make} ${currentVehicle.model}`,url:window.location.href}); }
+
+checkSession();
 </script>
 </body>
 </html>
