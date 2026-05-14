@@ -139,7 +139,7 @@
     .modal-photos { padding: 24px 24px 0 24px; border-bottom: 1px solid var(--border); }
     .modal-main-photo { height: 500px; border-radius: 12px; background: #1a1a1a; overflow: hidden; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; }
     .modal-main-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
-    .modal-main-photo-placeholder { font-size: 72px; opacity: 0.2; }
+    .modal-main-photo-placeholder { font-size: 88px; opacity: 0.2; }
     .modal-thumbs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
     .modal-thumb { width: 80px; height: 64px; border-radius: 8px; overflow: hidden; flex-shrink: 0; border: 2px solid transparent; cursor: pointer; background: var(--light); display: flex; align-items: center; justify-content: center; font-size: 20px; opacity: 0.4; transition: border-color 0.15s, opacity 0.15s; }
     .modal-thumb.active { border-color: var(--blue); opacity: 1; }
@@ -701,7 +701,7 @@
   }
 
   function switchModalPhoto(url,thumbEl) {
-    document.getElementById('modal-main-photo').innerHTML=`<img src="${url}" style="width:100%;height:100%;object-fit:cover;object-position:top" />`;
+    document.getElementById('modal-main-photo').innerHTML=`<img src="${url}" style="width:100%;height:100%;object-fit:cover;object-position:center;background:#000" />`;
     document.querySelectorAll('.modal-thumb').forEach(t=>t.classList.remove('active'));
     thumbEl.classList.add('active');
   }
